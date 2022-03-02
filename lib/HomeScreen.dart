@@ -38,13 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  _changeScreen(int index){
-    setState(() {
-      currentPage = index;
-      _screenSelected(currentPage);
-      _showNamePage(currentPage);
-    });
-  }
 
 
   @override
@@ -135,7 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black.withOpacity(0.5),
         onTap: (index) {
-
+          setState(() {
+            currentPage = index;
+          });
         },
       ),
     );
