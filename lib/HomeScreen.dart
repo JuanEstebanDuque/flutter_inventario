@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Setting.dart';
-import 'Profile.dart';
 import 'Inventario.dart';
+import 'Home.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -11,21 +10,18 @@ class HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  int currentPage = 0;
 
-  late int currentPage;
-
-  _getDrawerItemWidget(int pos){
+  /*_getDrawerItemWidget(int pos){
     switch(pos){
       case 0: return Settings();
       case 1: return Profile();
     }
-  }
-
-
+  }*/
 
   _screenSelected(int pos){
     switch(pos){
-      case 0: return HomeScreen();
+      case 0: return Home();
       case 1: return Inventario();
     }
   }
@@ -38,11 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    currentPage = 0;
 
     return Scaffold(
       //*AppBar
@@ -136,22 +129,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-/*
-class CustomScreen extends StatelessWidget {
-
-  final Color color;
-
-  const CustomScreen({ required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: Text('CustomScrenn'),
-      ),
-    );
-  }
-}
-*/

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class Inventario extends StatelessWidget{
+class Home extends StatelessWidget{
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Center(
       child: Container(
-        height: 20.0,
         width: 20.0,
+        height: 20.0,
         color: Colors.black,
         child: const Text(
-          'Inventario',
+          'Inicio',
           style: TextStyle(color: Colors.white),
         ),
       ),

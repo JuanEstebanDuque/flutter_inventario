@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
+import 'Login.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        home: HomeScreen()
+        home: Login()
     );
   }
 }
