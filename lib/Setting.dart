@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget{
+class Setting extends StatelessWidget{
 @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Settings'),
     );
   }

@@ -1,6 +1,10 @@
+import 'package:first_proyect/model/Product.dart';
+import 'package:first_proyect/model/ProductData.dart';
 import 'package:flutter/material.dart';
-import 'Inventario.dart';
+import 'Inventary.dart';
 import 'Home.dart';
+import 'Setting.dart';
+import 'Profile.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -12,12 +16,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int currentPage = 0;
 
-  /*_getDrawerItemWidget(int pos){
+  _getDrawerItemWidget(int pos){
     switch(pos){
-      case 0: return Settings();
+      case 0: return Setting();
       case 1: return Profile();
     }
-  }*/
+  }
 
   _screenSelected(int pos){
     switch(pos){
@@ -40,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       //*AppBar
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor:const  Color.fromRGBO(255, 152, 0, 1),
         title: Text(
           _showNamePage(currentPage),
           style: const TextStyle(
@@ -69,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.orange,
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: Color.fromRGBO(133, 109, 119, 1),
                 child: Text(
                   'J',
                   style: TextStyle(
@@ -84,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.black,
               ),
               onTap: (){
-                //_onSelectItem(0);
+                setState(() {
+                  _getDrawerItemWidget(0);
+                });
               },
             ),
             ListTile(
@@ -93,28 +99,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.black,
               ),
               onTap: (){
-                //_onSelectItem(1);
+                setState(() {
+                  _getDrawerItemWidget(1);
+                });
               },
             ),
           ],
         ),
       ),
       body: _screenSelected(currentPage),
+      
 
       //*Boton de navegación
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 35.0,
-        backgroundColor: Colors.orange,
+        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Inicio',
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.inventory),
+              icon: Icon(Icons.inventory_outlined),
               label: 'Inventario',
-            backgroundColor: Colors.amber,
+            backgroundColor: Colors.black,
           ),
         ],
         currentIndex: currentPage,
