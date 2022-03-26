@@ -1,5 +1,7 @@
+import 'package:first_proyect/Login.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/ProductData.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Inventary.dart';
 import 'Home.dart';

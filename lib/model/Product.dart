@@ -10,6 +10,7 @@ class Product{
   String _description = '';
   Category _category = Category.newest;
   Status _status = Status.deactive;
+  String image = "";
   double _salePrice = 0;
   double _productionPrice = 0;
   int _quantityProduct = 0;
@@ -30,12 +31,11 @@ class Product{
 
   void addProduct(String name,String material,String description,Category category,Status status,double salePrice,double productionPrice,int quantityProduct){
     ProductData().product.add(Product(name, material, description, category, status, salePrice, productionPrice, quantityProduct));
-    ProductData().product.add(Product('Barón rojo', 'Plata 925', 'Hermoso', Category.ring, Status.deactive, 2500, 2000, 20));
-
-  }
-
-  void showProduct(){
-    //print(ProductData().product);
+    ProductData().product.add(Product('King Dead', 'Plata 925', 'Precioso Anillo', Category.ring, Status.deactive, 4000, 1800, 10));
+    ProductData().product.add(Product('Silver Skull', 'Plata 925', 'Imponente Anillo', Category.ring, Status.active, 1500, 650, 9));
+    ProductData().product.add(Product('Tentáculo', 'Plata 925', 'Imponente Anillo', Category.ring, Status.deactive, 2000, 950, 9));
+    ProductData().product.add(Product('Camaleón', 'Plata 925 y Lapizlazuli', 'Hermoso Anillo', Category.ring, Status.active, 3250, 1500, 10));
+    ProductData().product.add(Product('Juan II', 'Plata 925', 'Lindo', Category.ring, Status.active, 1500, 650, 11));
   }
 
   void set name(String name){

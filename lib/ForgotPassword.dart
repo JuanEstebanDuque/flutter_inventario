@@ -1,118 +1,100 @@
-import 'package:first_proyect/HomeScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'Login.dart';
 
-class Product {
-  const Product({required this.name,required this.price});
-
-  final String name;
-  final String price;
-}
-
-typedef InventoryChanged = Function(Product product);
-
-class InventoryGridListItem extends StatelessWidget {
-  InventoryGridListItem({
-    required this.product,
-    required this.changed,
-  }) : super(key: ObjectKey(product));
-
-  final Product product;
-  final InventoryChanged changed;
-
-  TextStyle? _getTextStyle(BuildContext context) {
-    return const TextStyle(
-      color: Colors.black,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        changed(product);
-      },
-      title: Text(
-        product.price,
-        style: _getTextStyle(context),
-      ),
-      leading: Text(
-        product.name,
-        style: _getTextStyle(context),
-      ),
-    );
-  }
-}
-
-class InventoryList extends StatefulWidget {
-  const InventoryList({required this.products, Key? key}) : super(key: key);
-
-  final List<Product> products;
-
-  // The framework calls createState the first time
-  // a widget appears at a given location in the tree.
-  // If the parent rebuilds and uses the same type of
-  // widget (with the same key), the framework re-uses
-  // the State object instead of creating a new State object.
-
-  @override
-  _InventoryListState createState() => _InventoryListState();
-}
-
-class _InventoryListState extends State<InventoryList> {
-
-  void _handleCartChanged(Product product) {
-    setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen())
-        );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shopping List'),
-      ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        children: widget.products.map((Product product) {
-          return InventoryGridListItem(
-            product: product,
-            changed: _handleCartChanged,
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class ForgotPassword extends StatefulWidget{
+class ForgotPassword extends StatefulWidget {
   @override
   State<ForgotPassword> createState() => _ForgotPassword();
 }
 
-class _ForgotPassword extends State<ForgotPassword>{
+class _ForgotPassword extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: InventoryList(
-      products: [
-        Product(name: 'Xkull',price: '2000'),
-        Product(name: 'Luna Lunera',price: '5014'),
-        Product(name: 'Juan II',price: '563213'),
-        Product(name: 'Narayana',price: '45646'),
-        Product(name: 'Water Dragon',price: '849'),
-        Product(name: 'Camaleon',price: '87954'),
-        Product(name: 'Flor de Loto',price: '8456'),
-        Product(name: 'Zen',price: '13215'),
-        Product(name: 'Tullus',price: '2000'),
-        Product(name: 'Warrio',price: '5000'),
-      ],
-    ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        title: const Text(
+          'Recuperar contraseña',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        elevation: 0,
+      ),
+      body: Center(
+        child: Padding(
+          padding:
+            const EdgeInsets.only(left: 20.0, top: 250.0, right: 20.0, bottom: 0.0),
+          child: Column(
+            children: <Widget>[
+              const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Ingrese el correo electrónico vinculado a la cuenta para recibir la restauración de la contraseña.',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18
+                  ),
+                  //textAlign: TextAlign.center,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 0.0, top: 15.0, right: 0.0, bottom: 15.0),
+                child: TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Correo electrónico',
+                  ),
+                ),
+              ),
+              CupertinoButton(
+                  disabledColor: const Color.fromRGBO(255, 152, 0, 1),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  pressedOpacity: 0.85,
+                  child: const Text(
+                    'Reestablecer',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  color: const Color.fromRGBO(255, 152, 0, 1),
+                  onPressed: () => showDialog<String>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Restauración de contraseña'),
+                        content: const Text('¿Seguro desea mandar la restauración de contraseña a este correo?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Cancelar',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Login()),
+                              );
+                            },
+                            child: const Text('Continuar'),
+                          ),
+                        ],
+                      );
+                    } 
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
