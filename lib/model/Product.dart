@@ -33,9 +33,9 @@ class Product{
     ProductData().product.add(Product(name, material, description, category, status, salePrice, productionPrice, quantityProduct));
     ProductData().product.add(Product('King Dead', 'Plata 925', 'Precioso Anillo', Category.ring, Status.deactive, 4000, 1800, 10));
     ProductData().product.add(Product('Silver Skull', 'Plata 925', 'Imponente Anillo', Category.ring, Status.active, 1500, 650, 9));
-    ProductData().product.add(Product('Tentáculo', 'Plata 925', 'Imponente Anillo', Category.ring, Status.deactive, 2000, 950, 9));
-    ProductData().product.add(Product('Camaleón', 'Plata 925 y Lapizlazuli', 'Hermoso Anillo', Category.ring, Status.active, 3250, 1500, 10));
-    ProductData().product.add(Product('Juan II', 'Plata 925', 'Lindo', Category.ring, Status.active, 1500, 650, 11));
+    //ProductData().product.add(Product('Tentáculo', 'Plata 925', 'Imponente Anillo', Category.ring, Status.deactive, 2000, 950, 9));
+    //ProductData().product.add(Product('Camaleón', 'Plata 925 y Lapizlazuli', 'Hermoso Anillo', Category.ring, Status.active, 3250, 1500, 10));
+    //ProductData().product.add(Product('Juan II', 'Plata 925', 'Lindo', Category.ring, Status.active, 1500, 650, 11));
   }
 
   void set name(String name){

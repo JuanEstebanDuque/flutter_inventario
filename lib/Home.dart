@@ -11,19 +11,22 @@ class Home extends StatefulWidget {
   State<Home> createState() => _Home();
 }
 
-class _Home extends State<Home>{
-  
-
+class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     ProductData data2 = ProductData();
-    Product data = Product('Barón Rojo', 'Plata 925', 'Precioso Anillo', Category.ring, Status.deactive, 4000, 1800, 20);
-    data.addProduct('Shini', 'Plata 925', 'Precioso Anillo', Category.ring, Status.deactive, 4000, 1800, 20);
+    Product data = Product('Barón Rojo', 'Plata 925', 'Precioso Anillo', Category.ring,Status.deactive, 4000, 1800, 9);
+    ProductData().product.add(Product('Shini', 'Plata 925', 'Precioso Anillo', Category.ring, Status.deactive, 4000, 1800, 20));
 
     List<Product> screenProduct = [];
-    for (var i = 0; i < ProductData().product.length ; i++) {
-      screenProduct[i] = ProductData().product[i];
-    }
+    setState(() {
+      for (int i = 0; i < ProductData().product.length; i++) {
+        if (ProductData().product[i].quantityProduct <= 10) {
+          screenProduct[i] = ProductData().product[i];
+          
+        }
+      }
+    });
 
     return Center(
       child: GridView.builder(
@@ -50,4 +53,3 @@ class _Home extends State<Home>{
     );
   }
 }
-
