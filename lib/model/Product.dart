@@ -7,8 +7,8 @@ class Product{
   String _name = '';
   String _material = '';
   String _description = '';
-  ProductCategory _category = ProductCategory.newest;
-  Status _status = Status.deactive;
+  int _category = ProductCategory.newest;
+  int _status = Status.deactive;
   String image = "";
   double _salePrice = 0;
   double _productionPrice = 0;
@@ -17,7 +17,7 @@ class Product{
   //relations
 
   //methods
-  Product(String name,String material,String description,ProductCategory category,Status status,double salePrice,double productionPrice,int quantityProduct){
+  Product(String name,String material,String description,int category,int status,double salePrice,double productionPrice,int quantityProduct){
     _name = name;
     _material = material;
     _description = description;
@@ -52,19 +52,19 @@ class Product{
     return _description;
   }
 
-  void set category(ProductCategory category){
+  void set category(int category){
     _category = category;
   }
 
-  ProductCategory get category{
+  int get category{
     return _category;
   }
 
-  void set status(Status status){
+  void set status(int status){
     _status = status;
   }
 
-  Status get status{
+  int get status{
     return _status;
   }
 
@@ -90,6 +90,32 @@ class Product{
 
   int get quantityProduct{
     return _quantityProduct;
+  }
+
+  Map<String, dynamic> toJson(){
+    return {
+      "name": _name,
+      "material": _material,
+      "description": _description,
+      "image": image,
+      "salePrice": _salePrice,
+      "productionPrice": _productionPrice,
+      "quantityProduct": _quantityProduct,
+      "status": _status,
+      "category": _category,
+    };
+  }
+
+  static Product fromJson(Map<String, dynamic> map){
+    return Product(
+      map['name'], 
+      map['material'], 
+      map['description'], 
+      map['category'], 
+      map['status'], 
+      map['salePrice'], 
+      map['productionPrice'], 
+      map['quantityProduct']);
   }
 
 }

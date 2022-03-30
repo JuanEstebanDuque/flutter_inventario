@@ -1,9 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:localstore/localstore.dart';
 import 'HomeScreen.dart';
 import 'Register.dart';
 import 'ForgotPassword.dart';
+import 'model/Product.dart';
+import 'model/ProductCategory.dart';
+import 'model/Status.dart';
+import 'model/StorageManager.dart';
 
 class Login extends StatefulWidget{
   @override
@@ -11,6 +19,29 @@ class Login extends StatefulWidget{
 }
 
 class _LoginScreenState extends State<Login>{
+
+
+@override
+  void initState() {
+    super.initState();
+
+    //Esta es la lista de productos general
+    Map<String, Product> products = {
+          "A":Product('Alfa', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.deactive, 4000, 1800, 5),
+          "B":Product('Beta', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.deactive, 4000, 1800, 9),
+          "G":Product('Gamma', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.active, 4000, 1800, 12),
+          "D":Product('Delta', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.deactive, 4000, 1800, 15)
+    };
+    //String json = jsonEncode(products);
+
+    for(var entry in products.entries){
+      Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
+    }
+
+    Localstore.instance.collection("products").doc("list").delete();
+    
+  }
+
 @override
   Widget build(BuildContext context) {
     return Scaffold(

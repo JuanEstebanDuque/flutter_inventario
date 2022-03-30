@@ -4,20 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/Status.dart';
+import 'package:localstore/localstore.dart';
 
 import 'model/ProductCategory.dart';
 
 class Home extends StatefulWidget {
-
-  //Esta es la lista de productos general
-  final List<Product> products = [
-        Product('Alfa', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.deactive, 4000, 1800, 5),
-        Product('Beta', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.deactive, 4000, 1800, 9),
-        Product('Gamma', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.active, 4000, 1800, 12),
-        Product('Delta', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.deactive, 4000, 1800, 15)
-  ];
-
-
   @override
   State<Home> createState() => _Home();
 }
@@ -31,9 +22,18 @@ class _Home extends State<Home> {
   @override
   void initState() {
     super.initState();
-    for(Product product in widget.products){
-      if(product.quantityProduct >= 10){
-        visibleProducts.add(product);
+    readLS();
+  }
+
+   Future<void> readLS() async {
+    final items = await Localstore.instance.collection('products').get();
+    for(var entry in items!.entries){
+      var product = Product.fromJson(entry.value);
+      if(product.quantityProduct <= 10){
+        setState(() {
+          visibleProducts.add(product);  
+        });
+        
       }
     }
   }
