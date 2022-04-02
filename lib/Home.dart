@@ -15,10 +15,8 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
 
-  //Esta es la lista de productos visibles en pantalla
   final List<Product> visibleProducts = [];
 
-  //Este es el método al que me refiero que es como el initializable de JavaFX
   @override
   void initState() {
     super.initState();
@@ -33,7 +31,6 @@ class _Home extends State<Home> {
         setState(() {
           visibleProducts.add(product);  
         });
-        
       }
     }
   }
@@ -50,9 +47,23 @@ class _Home extends State<Home> {
         ),
         itemCount: visibleProducts.length,
         itemBuilder: (BuildContext context, int index) {
+          String price = "${visibleProducts[index].salePriceProduct}";
           return Card(
             child: GridTile(
-              footer: Text(visibleProducts[index].name),
+              header: Text(
+                visibleProducts[index].nameProduct,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 13.5,
+                ),
+              ),
+              footer: Text(
+                price,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 13,
+                ),
+              ),
               child: Image.asset(
                 'Anillo/_DAV9460-Editar.png',
                 width: 100,

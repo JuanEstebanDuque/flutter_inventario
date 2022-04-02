@@ -1,87 +1,96 @@
+import 'package:flutter/cupertino.dart';
 import 'ProductCategory.dart';
 import 'Status.dart';
-import 'package:first_proyect/model/ProductCategory.dart';
 
 class Product{
   //attributes
-  String _name = '';
-  String _material = '';
-  String _description = '';
-  int _category = ProductCategory.newest;
-  int _status = Status.deactive;
-  String image = "";
-  double _salePrice = 0;
-  double _productionPrice = 0;
+  String _nameProduct = '';
+  String _materialProduct = '';
+  String _descriptionProduct = '';
+  int _categoryProduct = 0;
+  int _statusProduct = 0;
+  String _imagePathProduct = "";
+  double _salePriceProduct = 0;
+  double _productionPriceProduct = 0;
   int _quantityProduct = 0;
 
   //relations
 
   //methods
-  Product(String name,String material,String description,int category,int status,double salePrice,double productionPrice,int quantityProduct){
-    _name = name;
-    _material = material;
-    _description = description;
-    _category = category;
-    _status = status;
-    _salePrice = salePrice;
-    _productionPrice = productionPrice;
+  Product(String name,String material,String description,int category,int status,String imagePath,double salePrice,double productionPrice,int quantityProduct){
+    _nameProduct = name;
+    _materialProduct = material;
+    _descriptionProduct = description;
+    _categoryProduct = category;
+    _statusProduct = status;
+    _imagePathProduct = imagePath;
+    _salePriceProduct = salePrice;
+    _productionPriceProduct = productionPrice;
     _quantityProduct = quantityProduct;
   }
 
-  void set name(String name){
-    _name = name;
+  void set nameProduct(String nameProduct){
+    _nameProduct = nameProduct;
   }
 
-  String get name{
-    return _name;
+  String get nameProduct{
+    return _nameProduct;
   }
 
-  void set material(String material){
-    _material = material;
+  void set materialProduct(String materialProduct){
+    _materialProduct = materialProduct;
   }
   
-  String get material{
-    return _material;
+  String get materialProduct{
+    return _materialProduct;
   }
 
-  void set description(String description){
-    _description = description;
+  void set descriptionProduct(String descriptionProduct){
+    _descriptionProduct = descriptionProduct;
   }
 
-  String get description{
-    return _description;
+  String get descriptionProduct{
+    return _descriptionProduct;
   }
 
-  void set category(int category){
-    _category = category;
+  void set categoryProduct(int categoryProduct){
+    _categoryProduct = categoryProduct;
   }
 
-  int get category{
-    return _category;
+  int get categoryProduct{
+    return _categoryProduct;
   }
 
-  void set status(int status){
-    _status = status;
+  void set statusProduct(int statusProduct){
+    _statusProduct = statusProduct;
   }
 
-  int get status{
-    return _status;
+  int get statusProduct{
+    return _statusProduct;
   }
 
-  void set salePrice(double salePrice){
-    _salePrice = salePrice;
+  void set imagePathProduct(String imagePathProduct){
+    _imagePathProduct = imagePathProduct;
   }
 
-  double get salePrice{
-    return _salePrice;
+  String get imagePathProduct{
+    return _imagePathProduct;
   }
 
-  void set productionPrice(double productionPrice){
-    _productionPrice = productionPrice;
+  void set salePriceProduct(double salePriceProduct){
+    _salePriceProduct = salePriceProduct;
   }
 
-  double get productionPrice{
-    return _productionPrice;
+  double get salePriceProduct{
+    return _salePriceProduct;
+  }
+
+  void set productionPriceProduct(double productionPriceProduct){
+    _productionPriceProduct = productionPriceProduct;
+  }
+
+  double get productionPriceProduct{
+    return _productionPriceProduct;
   }
 
   void set quantityProduct(int quantityProduct){
@@ -94,27 +103,28 @@ class Product{
 
   Map<String, dynamic> toJson(){
     return {
-      "name": _name,
-      "material": _material,
-      "description": _description,
-      "image": image,
-      "salePrice": _salePrice,
-      "productionPrice": _productionPrice,
+      "nameProduct": _nameProduct,
+      "materialProduct": _materialProduct,
+      "descriptionProduct": _descriptionProduct,
+      "categoryProduct": _categoryProduct,
+      "statusProduct": _statusProduct,
+      "imagePathProduct": _imagePathProduct,
+      "salePriceProduct": _salePriceProduct,
+      "productionPriceProduct": _productionPriceProduct,
       "quantityProduct": _quantityProduct,
-      "status": _status,
-      "category": _category,
     };
   }
 
   static Product fromJson(Map<String, dynamic> map){
     return Product(
-      map['name'], 
-      map['material'], 
-      map['description'], 
-      map['category'], 
-      map['status'], 
-      map['salePrice'], 
-      map['productionPrice'], 
+      map['nameProduct'], 
+      map['materialProduct'], 
+      map['descriptionProduct'], 
+      map['categoryProduct'], 
+      map['statusProduct'],
+      map['imagePathProduct'], 
+      map['salePriceProduct'], 
+      map['productionPriceProduct'], 
       map['quantityProduct']);
   }
 

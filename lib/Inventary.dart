@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
-
 import 'model/Product.dart';
-import 'model/StorageManager.dart';
 
 class Inventario extends StatefulWidget{
    @override
@@ -23,7 +21,7 @@ class _Inventario extends State<Inventario> {
     final items = await Localstore.instance.collection('products').get();
     for(var entry in items!.entries){
       var product = Product.fromJson(entry.value);
-      print(product.description);
+      print(product.nameProduct);
     }
   }
 
