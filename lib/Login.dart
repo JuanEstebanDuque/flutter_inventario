@@ -39,17 +39,23 @@ final List<User> saveUser = [];
     for(var entry in products.entries){
       Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
     }
-
     readLS();
-    
   }
 
   Future<void> readLS() async {
     final items = await Localstore.instance.collection('users').get();
     for(var entry in items!.entries){
-      var user = User.fromJson(entry.value);
-      saveUser.add(user);
-      print(user);  
+      if(items.entries.isEmpty){
+        setState(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Register()),
+          );
+        });
+      } else {
+        var user = User.fromJson(entry.value);
+        saveUser.add(user);
+      }
     }
   }
 
@@ -72,7 +78,7 @@ final List<User> saveUser = [];
                     autofocus: true,
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
-                    obscureText: true,
+                    obscureText: false,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Correo electrónico',
@@ -152,40 +158,36 @@ final List<User> saveUser = [];
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: () {
-                      int i=0;
-                      for(int i=0;i<saveUser.length;i++){
-                        if(_userEmail == saveUser[i].userEmail && _userPassword == saveUser[i].userPassword){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()),
-                          );
-                        } else {
-                          showDialog<String>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Inicio de sesión incorrecto'),
-                              content: const Text(
-                                'El correo o contraseña ingresados son incorrectos. Intente nuevamente.'),
-                              actions: <Widget>[
-                                TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Login()),
-                                    );
-                                },
-                                child: const Text(
-                                  'Volver',
-                                  style: TextStyle(color: Colors.red),
-                                ),
+                      if(verifyLogin() == 0){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      } else if (verifyLogin() == -1){
+                        showDialog<String>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Inicio de sesión incorrecto'),
+                            content: const Text(
+                              'El correo o contraseña ingresados son incorrectos. Intente nuevamente.'),
+                            actions: <Widget>[
+                              TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Login()),
+                                );
+                              },
+                              child: const Text(
+                                'Volver',
+                              style: TextStyle(color: Colors.red),
                               ),
-                            ],
-                          );
-                        });
-                        }
-                        i++;
+                            ),
+                          ],
+                        );
+                      });
                       }
                     },
                     child: const Text(
@@ -204,4 +206,16 @@ final List<User> saveUser = [];
       ),
     );
   }
+
+  int verifyLogin(){
+    int checkLogin = -1;
+    for(int i=0;i<saveUser.length;i++){
+      if(_userEmail == saveUser[i].userEmail && _userPassword == saveUser[i].userPassword){
+        checkLogin = 0;
+        return checkLogin;              
+      } 
+    }
+    return checkLogin;
+  }
+
 }

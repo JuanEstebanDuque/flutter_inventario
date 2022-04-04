@@ -2,6 +2,7 @@ import 'package:first_proyect/model/UserRole.dart';
 
 class User{
   //attributes
+  String _userId = "";
   String _userName = "";
   String _userLastName = "";
   String _userEmail = "";
@@ -12,13 +13,22 @@ class User{
   //relations
 
   //methods
-  User(String userName,String userLastName,String userEmail,String userPassword,String userPhone,int userRole){
+  User(String userId,String userName,String userLastName,String userEmail,String userPassword,String userPhone,int userRole){
+    _userId = userId;
     _userName = userName;
     _userLastName = userLastName;
     _userEmail = userEmail;
     _userPassword = userPassword;
     _userPhone = userPhone;
     _userRole = userRole;
+  }
+
+  void set userId(String userId){
+    _userId = userId;
+  }
+
+  String get userId{
+    return _userId;
   }
 
   void set userName(String userName){
@@ -71,6 +81,7 @@ class User{
 
   Map<String, dynamic> toJson(){
     return {
+      "userId": _userId,
       "userName": _userName,
       "userLastName": _userLastName,
       "userEmail": _userEmail,
@@ -82,6 +93,7 @@ class User{
 
   static User fromJson(Map<String, dynamic> map){
     return User(
+      map['userId'],
       map['userName'], 
       map['userLastName'], 
       map['userEmail'], 

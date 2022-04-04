@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import 'Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<Register> {
+  List<String> items = ['Administrador','Colaborador','Empleado'];
+  String view = 'Seleccione una opción';
+
   String _userName = "";
   String _userLastName = "";
   String _userEmail = "";
@@ -56,12 +61,12 @@ class _RegisterScreenState extends State<Register> {
                 autofocus: true,
                 autocorrect: true,
                 keyboardType: TextInputType.name,
-                obscureText: true,
+                obscureText: false,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Nombre',
                 ),
-                onSubmitted:  (String nameRegister) {
+                onChanged:  (String nameRegister) {
                   setState(() {
                     _userName = nameRegister;
                     //print(_userName);
@@ -75,12 +80,12 @@ class _RegisterScreenState extends State<Register> {
                   autofocus: true,
                   autocorrect: true,
                   keyboardType: TextInputType.name,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Apellido',
                   ),
-                  onSubmitted: (String lastNameRegister) {
+                  onChanged: (String lastNameRegister) {
                     setState(() {
                       _userLastName = lastNameRegister;
                       //print(_userLastName);
@@ -95,12 +100,12 @@ class _RegisterScreenState extends State<Register> {
                   autofocus: true,
                   autocorrect: true,
                   keyboardType: TextInputType.emailAddress,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Correo',
                   ),
-                  onSubmitted: (String emailRegister) {
+                  onChanged: (String emailRegister) {
                     setState(() {
                       _userEmail = emailRegister;
                       //print(_userEmail);
@@ -111,16 +116,19 @@ class _RegisterScreenState extends State<Register> {
               Padding(
                 padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
                 child: TextField(
+                  autocorrect: true,
+                  autofocus: true,
+                  keyboardType: TextInputType.text,
                   obscureText: true,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Contraseña',
                   ),
-                  onSubmitted: (String userPassword){
+                  onChanged: (String userPassword){
                     setState(() {
                       _userPassword = userPassword;
+                      //print(_userPassword);
                     });
-                    
                   },
                 ),
               ),
@@ -136,7 +144,7 @@ class _RegisterScreenState extends State<Register> {
                     border: OutlineInputBorder(),
                     labelText: 'Confirmar contraseña',
                   ),
-                  onSubmitted: (String checkPasswordRegister) {
+                  onChanged: (String checkPasswordRegister) {
                     setState(() {
                       _checkPassword = checkPasswordRegister;
                       //print(_checkPassword);
@@ -151,12 +159,12 @@ class _RegisterScreenState extends State<Register> {
                   autofocus: true,
                   autocorrect: true,
                   keyboardType: TextInputType.number,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Número de celular',
                   ),
-                  onSubmitted: (String numberRegister) {
+                  onChanged: (String numberRegister) {
                     setState(() {
                       _userPhone = numberRegister;
                       //print(_userPhone);
@@ -171,12 +179,12 @@ class _RegisterScreenState extends State<Register> {
                   autofocus: true,
                   autocorrect: true,
                   keyboardType: TextInputType.text,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Nombre de la empresa',
                   ),
-                  onSubmitted: (String companyRegister) {
+                  onChanged: (String companyRegister) {
                     setState(() {
                       _userCompany = companyRegister;
                       //print(_userCompany);
@@ -184,9 +192,33 @@ class _RegisterScreenState extends State<Register> {
                   },
                 ),
               ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
+                child: DropdownButton<String>(
+                  value: view,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                    view = newValue!;
+                    });
+                  },
+                  items: <String>['One', 'Two', 'Free', 'Four'].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),*/
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 0.0, top: 15.0, right: 0.0, bottom: 0.0),
+                    left: 0.0, top: 15.0, right: 0.0, bottom: 10.0),
                 child: CupertinoButton(
                     disabledColor: const Color.fromRGBO(255, 152, 0, 1),
                     color: const Color.fromRGBO(255, 152, 0, 1),
@@ -197,86 +229,97 @@ class _RegisterScreenState extends State<Register> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-                      if (_userName != "" && _userLastName != "" && _userEmail != "" && _userPassword != "" && _checkPassword == "" && _userPhone != "" && _userCompany != "") {
-                        if(_userPassword == _checkPassword){
-                          String randomKey = Uuid().v4();
-                          Map<String, User> users = {
-                            randomKey: User(_userName, _userLastName, _userEmail,_userPassword, _userPhone, 1),
-                          };
-                          for (var entry in users.entries) {
-                            //Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());
-                            Localstore.instance.collection("users").doc().delete();
-                          }
-                          showDialog<String>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Registro exitoso'),
-                                content: const Text(
-                                  'Su usuario fue registrado correctamente.'),
-                                actions: <Widget>[
-                                  TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Login()),
-                                      );
-                                    },
-                                    child: const Text('Continuar'),
-                                  ),
-                                ],
-                              );
-                            });
-                        }
-                      } else if (checkUser != []) {
-                        for (int i = 0; i < checkUser.length; i++) {
-                          if (_userEmail == checkUser[i].userEmail) {
-                            showDialog<String>(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Registro no exitoso'),
-                                  content: const Text(
-                                    'El correo ingresado ya existe. Intente nuevamente.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'Volver',
-                                      style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              });
-                          }
-                        }
-                      } else {
+                      if(checkRegister() == 1){
                         showDialog<String>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Registro no exitoso'),
-                                content: const Text(
-                                    'Complete los parámetros para poder registrarse. Intente nuevamente.'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Volver',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Registro exitoso'),
+                              content: const Text(
+                                'Su usuario fue registrado correctamente.'),
+                              actions: <Widget>[
+                                TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Login()),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Continuar',
+                                  style: TextStyle(fontSize: 16.0,color: Colors.blue),
                                   ),
-                                ],
-                              );
-                            });
+                                ),
+                              ],
+                            );
+                          });
+                      } else if(checkRegister() == 2){
+                        showDialog<String>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Registro no exitoso'),
+                              content: const Text(
+                                'Las contraseñas ingresadas no coinciden, verifique e intente nuevamente.'),
+                              actions: <Widget>[
+                                TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'Volver',
+                                  style: TextStyle(fontSize: 16.0,color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                      } else if (checkRegister() == 0) {
+                        showDialog<String>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Registro no exitoso'),
+                            content: const Text(
+                              'El correo ingresado ya existe. Intente nuevamente.'),
+                            actions: <Widget>[
+                              TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Volver',
+                              style: TextStyle(fontSize: 16.0,color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        );
+                      });  
+                      } else if(checkRegister() == -1){
+                        showDialog<String>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Registro no exitoso'),
+                              content: const Text(
+                                'Complete los parámetros para poder registrarse. Intente nuevamente.'),
+                              actions: <Widget>[
+                              TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Volver',
+                              style: TextStyle(fontSize: 16.0,color: Colors.red),
+                              ),
+                              ),
+                            ],
+                          );
+                        });
                       }
                     }),
               ),
@@ -285,5 +328,51 @@ class _RegisterScreenState extends State<Register> {
         ),
       ),
     );
+  }
+
+  int checkRegister(){
+    int verifyRegister = -1;
+    print("entro");
+    print(_userName=="");
+    print("---------");
+    print(_userLastName=="");
+    print("----------");
+    print(_userEmail=="");
+    print("---------");
+    print(_userPassword=="");
+    print("-------------");
+    print(_checkPassword=="");
+    print("-----------");
+    print(_userPhone=="");
+    print("-------------");
+    print(_userCompany=="");
+    print("------------");
+    if (_userName=="" && _userLastName=="" && _userEmail=="" && _userPassword=="" && _checkPassword=="" && _userPhone=="" && _userCompany=="") {
+      print("alfa");
+      if(_userPassword == _checkPassword){
+        print("hola");
+        String randomKey = Uuid().v4();
+        Map<String, User> users = {
+          randomKey: User(randomKey,_userName, _userLastName, _userEmail,_userPassword, _userPhone, 1),
+        };
+        for (var entry in users.entries) {
+        Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());
+        //Localstore.instance.collection("users").doc().delete();
+        }
+        verifyRegister = 1;
+        return verifyRegister;
+      } else {
+        verifyRegister = 2;
+        return verifyRegister;
+      }
+    } if(checkUser.isEmpty){
+      for (int i = 0; i < checkUser.length; i++) {
+        if (_userEmail == checkUser[i].userEmail) {
+          verifyRegister = 0;
+          return verifyRegister;                    
+        }
+      }
+    }
+    return verifyRegister;
   }
 }

@@ -4,6 +4,7 @@ import 'Status.dart';
 
 class Product{
   //attributes
+  //String _productId = "";
   String _nameProduct = '';
   String _materialProduct = '';
   String _descriptionProduct = '';
@@ -17,7 +18,8 @@ class Product{
   //relations
 
   //methods
-  Product(String name,String material,String description,int category,int status,String imagePath,double salePrice,double productionPrice,int quantityProduct){
+  Product(/*String productId,*/String name,String material,String description,int category,int status,String imagePath,double salePrice,double productionPrice,int quantityProduct){
+    //_productId = productId;
     _nameProduct = name;
     _materialProduct = material;
     _descriptionProduct = description;
@@ -28,6 +30,14 @@ class Product{
     _productionPriceProduct = productionPrice;
     _quantityProduct = quantityProduct;
   }
+
+  /*void set productId(String productId){
+    _productId = productId;
+  }
+
+  String get productId{
+    return _productId;
+  }*/
 
   void set nameProduct(String nameProduct){
     _nameProduct = nameProduct;
@@ -103,6 +113,7 @@ class Product{
 
   Map<String, dynamic> toJson(){
     return {
+      /*"productId": _productId,*/
       "nameProduct": _nameProduct,
       "materialProduct": _materialProduct,
       "descriptionProduct": _descriptionProduct,
@@ -117,6 +128,7 @@ class Product{
 
   static Product fromJson(Map<String, dynamic> map){
     return Product(
+      /*map['productId'],*/
       map['nameProduct'], 
       map['materialProduct'], 
       map['descriptionProduct'], 
