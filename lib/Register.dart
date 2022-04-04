@@ -205,7 +205,7 @@ class _RegisterScreenState extends State<Register> {
                           };
                           for (var entry in users.entries) {
                             //Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());
-                            Localstore.instance.collection("users").doc(entry.key).delete();
+                            Localstore.instance.collection("users").doc().delete();
                           }
                           showDialog<String>(
                             context: context,
