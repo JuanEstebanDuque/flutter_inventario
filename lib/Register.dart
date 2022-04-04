@@ -229,6 +229,10 @@ class _RegisterScreenState extends State<Register> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
+
+                      
+                      print(_userName);
+
                       if(checkRegister() == 1){
                         showDialog<String>(
                           context: context,
@@ -333,21 +337,21 @@ class _RegisterScreenState extends State<Register> {
   int checkRegister(){
     int verifyRegister = -1;
     print("entro");
+    print("Username");
     print(_userName=="");
-    print("---------");
+    print("Lastname");
     print(_userLastName=="");
-    print("----------");
+    print("Email");
     print(_userEmail=="");
-    print("---------");
+    print("Pass");
     print(_userPassword=="");
-    print("-------------");
+    print("CheckPass");
     print(_checkPassword=="");
-    print("-----------");
+    print("UserPhone");
     print(_userPhone=="");
-    print("-------------");
+    print("UserCompany");
     print(_userCompany=="");
-    print("------------");
-    if (_userName=="" && _userLastName=="" && _userEmail=="" && _userPassword=="" && _checkPassword=="" && _userPhone=="" && _userCompany=="") {
+    if (_userName!="" && _userLastName!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="") {
       print("alfa");
       if(_userPassword == _checkPassword){
         print("hola");
