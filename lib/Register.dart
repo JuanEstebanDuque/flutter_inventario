@@ -62,14 +62,16 @@ class _RegisterScreenState extends State<Register> {
                 autocorrect: true,
                 keyboardType: TextInputType.name,
                 obscureText: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Nombre',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  //labelText: 'Nombre',
+                  fillColor: Colors.grey[290],
+                  filled: true,
+                  hintText: 'Nombre',
                 ),
                 onChanged:  (String nameRegister) {
                   setState(() {
                     _userName = nameRegister;
-                    //print(_userName);
                   });
                 },
               ),
@@ -81,14 +83,16 @@ class _RegisterScreenState extends State<Register> {
                   autocorrect: true,
                   keyboardType: TextInputType.name,
                   obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Apellido',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Apellido',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Apellido',
                   ),
                   onChanged: (String lastNameRegister) {
                     setState(() {
                       _userLastName = lastNameRegister;
-                      //print(_userLastName);
                     });
                   },
                 ),
@@ -101,14 +105,16 @@ class _RegisterScreenState extends State<Register> {
                   autocorrect: true,
                   keyboardType: TextInputType.emailAddress,
                   obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Correo',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Correo',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Correo',
                   ),
                   onChanged: (String emailRegister) {
                     setState(() {
                       _userEmail = emailRegister;
-                      //print(_userEmail);
                     });
                   },
                 ),
@@ -120,14 +126,16 @@ class _RegisterScreenState extends State<Register> {
                   autofocus: true,
                   keyboardType: TextInputType.text,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Contraseña',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Contraseña',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Contraseña',
                   ),
                   onChanged: (String userPassword){
                     setState(() {
                       _userPassword = userPassword;
-                      //print(_userPassword);
                     });
                   },
                 ),
@@ -140,14 +148,16 @@ class _RegisterScreenState extends State<Register> {
                   autocorrect: true,
                   keyboardType: TextInputType.text,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Confirmar contraseña',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Confirmar contraseña',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Confimar contraseña',
                   ),
                   onChanged: (String checkPasswordRegister) {
                     setState(() {
                       _checkPassword = checkPasswordRegister;
-                      //print(_checkPassword);
                     });
                   },
                 ),
@@ -160,14 +170,16 @@ class _RegisterScreenState extends State<Register> {
                   autocorrect: true,
                   keyboardType: TextInputType.number,
                   obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Número de celular',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Número de celular',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Número de teléfono',
                   ),
                   onChanged: (String numberRegister) {
                     setState(() {
                       _userPhone = numberRegister;
-                      //print(_userPhone);
                     });
                   },
                 ),
@@ -180,14 +192,16 @@ class _RegisterScreenState extends State<Register> {
                   autocorrect: true,
                   keyboardType: TextInputType.text,
                   obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Nombre de la empresa',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Nombre de la empresa',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Nombre de la empresa'
                   ),
                   onChanged: (String companyRegister) {
                     setState(() {
                       _userCompany = companyRegister;
-                      //print(_userCompany);
                     });
                   },
                 ),
@@ -229,10 +243,6 @@ class _RegisterScreenState extends State<Register> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-
-                      
-                      print(_userName);
-
                       if(checkRegister() == 1){
                         showDialog<String>(
                           context: context,
@@ -247,7 +257,7 @@ class _RegisterScreenState extends State<Register> {
                                 onPressed: () {
                                   Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Login()),
+                                  MaterialPageRoute(builder: (context) => const Login()),
                                     );
                                   },
                                   child: const Text(
@@ -336,25 +346,8 @@ class _RegisterScreenState extends State<Register> {
 
   int checkRegister(){
     int verifyRegister = -1;
-    print("entro");
-    print("Username");
-    print(_userName=="");
-    print("Lastname");
-    print(_userLastName=="");
-    print("Email");
-    print(_userEmail=="");
-    print("Pass");
-    print(_userPassword=="");
-    print("CheckPass");
-    print(_checkPassword=="");
-    print("UserPhone");
-    print(_userPhone=="");
-    print("UserCompany");
-    print(_userCompany=="");
     if (_userName!="" && _userLastName!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="") {
-      print("alfa");
       if(_userPassword == _checkPassword){
-        print("hola");
         String randomKey = Uuid().v4();
         Map<String, User> users = {
           randomKey: User(randomKey,_userName, _userLastName, _userEmail,_userPassword, _userPhone, 1),

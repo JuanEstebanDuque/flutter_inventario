@@ -14,6 +14,7 @@ import 'model/Status.dart';
 import 'model/User.dart';
 
 class Login extends StatefulWidget{
+  const Login({Key? key}) : super(key: key);
   @override
   State<Login> createState() => _LoginScreenState();
 }
@@ -45,17 +46,8 @@ final List<User> saveUser = [];
   Future<void> readLS() async {
     final items = await Localstore.instance.collection('users').get();
     for(var entry in items!.entries){
-      if(items.entries.isEmpty){
-        setState(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Register()),
-          );
-        });
-      } else {
-        var user = User.fromJson(entry.value);
-        saveUser.add(user);
-      }
+      var user = User.fromJson(entry.value);
+      saveUser.add(user);
     }
   }
 
@@ -79,9 +71,12 @@ final List<User> saveUser = [];
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
                     obscureText: false,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Correo electrónico',
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      //labelText: 'Correo electrónico',
+                      fillColor: Colors.grey[290],
+                      filled: true,
+                      hintText: 'Correo electrónico',
                     ),
                     onChanged: (String emailLogin){
                       setState(() {
@@ -97,9 +92,12 @@ final List<User> saveUser = [];
                     autocorrect: true,
                     keyboardType: TextInputType.text,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Contraseña',
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      //labelText: 'Contraseña',
+                      fillColor: Colors.grey[290],
+                      filled: true,
+                      hintText: 'Contraseña',
                     ),
                     onChanged: (String passwordLogin){
                       setState(() {
@@ -139,7 +137,7 @@ final List<User> saveUser = [];
                     onPressed: (){
                       Navigator.push(
                         context, 
-                        MaterialPageRoute(builder: (context) => ForgotPassword()),
+                        MaterialPageRoute(builder: (context) => ForgotPassword(saveUser)),
                         );
                     },
                     child: const Text(
@@ -152,7 +150,7 @@ final List<User> saveUser = [];
                   ), 
                 ), 
                 Padding(
-                  padding: const EdgeInsets.only(left: 0.0,top: 0.0,right: 0.0,bottom: 0.0),
+                  padding: const EdgeInsets.only(left: 0.0,top: 0.0,right: 0.0,bottom: 15.0),
                   child: CupertinoButton(
                     disabledColor: const Color.fromRGBO(255, 152, 0, 1),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -161,7 +159,7 @@ final List<User> saveUser = [];
                       if(verifyLogin() == 0){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => HomeScreen(saveUser)),
                         );
                       } else if (verifyLogin() == -1){
                         showDialog<String>(
@@ -175,10 +173,7 @@ final List<User> saveUser = [];
                             actions: <Widget>[
                               TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Login()),
-                                );
+                                Navigator.pop(context);
                               },
                               child: const Text(
                                 'Volver',

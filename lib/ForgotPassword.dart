@@ -1,13 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Login.dart';
+import 'model/User.dart';
 
 class ForgotPassword extends StatefulWidget {
+  List<User> user = [];
+  ForgotPassword(this.user,{Key? key}) : super(key: key);  
   @override
   State<ForgotPassword> createState() => _ForgotPassword();
 }
 
 class _ForgotPassword extends State<ForgotPassword> {
+  String _inputUserEmail = "";
+  String _checkUserEmail = "";
+
+  String userEmail(){
+    String email = "";
+
+    return email;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,15 +52,26 @@ class _ForgotPassword extends State<ForgotPassword> {
                     //textAlign: TextAlign.center,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(
+                Padding(
+                  padding: const EdgeInsets.only(
                     left: 0.0, top: 15.0, right: 0.0, bottom: 15.0),
                   child: TextField(
-                    obscureText: true,
+                    autofocus: true,
+                    autocorrect: true,
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: false,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Correo electrónico',
+                      border: const OutlineInputBorder(),
+                      //labelText: 'Correo electrónico',
+                      fillColor: Colors.grey[290],
+                      filled: true,
+                      hintText: 'Correo electrónico',
                     ),
+                    onChanged: (String emailRecoverPassword){
+                      setState(() {
+                        _inputUserEmail = emailRecoverPassword;
+                      });
+                    },
                   ),
                 ),
                 CupertinoButton(

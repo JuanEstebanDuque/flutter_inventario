@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-class Setting extends StatefulWidget{
-  const Setting({Key? key}):super(key: key);
+class StatisticsReport extends StatefulWidget {
+  const StatisticsReport({ Key? key }) : super(key: key);
+
   @override
-  State<Setting> createState() => _Setting();
+  State<StatisticsReport> createState() => _StatisticsReportState();
 }
 
-class _Setting extends State<Setting>{
+class _StatisticsReportState extends State<StatisticsReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
         title: const Text(
-          'Ajustes',
+          'Informe y estadística',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -21,7 +22,7 @@ class _Setting extends State<Setting>{
         elevation: 2,
       ),
       body: Center(
-        child: Text('Settings'),
+        child: Text('Estadísticas y reporte'),
       ),
     );
   }
