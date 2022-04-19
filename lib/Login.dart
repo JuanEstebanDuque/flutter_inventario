@@ -44,7 +44,6 @@ final List<User> saveUser = [];
     for(var entry in items!.entries){
       var user = User.fromJson(entry.value);
       saveUser.add(user);
-      print(user.userRole);
     }
   }
 
