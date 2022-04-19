@@ -1,8 +1,10 @@
+import 'package:first_proyect/AddProduct.dart';
 import 'package:first_proyect/Login.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localstore/localstore.dart';
 import 'Inventary.dart';
 import 'Home.dart';
 import 'Setting.dart';
@@ -10,6 +12,9 @@ import 'Profile.dart';
 import 'Login.dart';
 import 'StatisticsReport.dart';
 import 'AddEmployeeCompany.dart';
+//import 'AddProduct.dart';
+
+//TODO: añadir arreglo de los productos aquí para que los lea
 
 class HomeScreen extends StatefulWidget{
 
@@ -20,22 +25,34 @@ class HomeScreen extends StatefulWidget{
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  String _userNameAdmin = "";
-  String _userEmialAdmin = "";
+  List<Product> visibleProducts = [];
 
   @override
   void initState(){
     super.initState();
     _userNameAdmin = _showInfoAdmin(0);
     _userEmialAdmin = _showInfoAdmin(1);
+    readLS();
   }
+
+  Future<void> readLS() async {
+    final items = await Localstore.instance.collection('products').get();
+    for (var entry in items!.entries) {
+      var product = Product.fromJson(entry.value);
+      visibleProducts.add(product);
+      print(product.nameProduct);
+    }
+  }
+
+  String _userNameAdmin = "";
+  String _userEmialAdmin = "";
+
   int currentPage = 0;
 
   _screenSelected(int pos){
     switch(pos){
-      case 0: return Home();
-      case 1: return Inventario();
+      case 0: return Home(visibleProducts);
+      case 1: return Inventary(visibleProducts);
     }
   }
 
@@ -162,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       //*Boton de navegación
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 20,
         iconSize: 35.0,
         backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
         items: const [
@@ -184,6 +202,22 @@ class _HomeScreenState extends State<HomeScreen> {
             currentPage = index;
           });
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        autofocus: true,
+        highlightElevation: 20,
+        child: const Icon(
+          Icons.add,
+          size: 35,
+        ),
+        onPressed: (){
+          Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) => AddProduct(visibleProducts,widget.user)),
+          );
+        },
+        elevation: 10,
       ),
     );
   }

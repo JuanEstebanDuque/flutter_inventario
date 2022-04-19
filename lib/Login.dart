@@ -28,19 +28,15 @@ final List<User> saveUser = [];
 @override
   void initState() {
     super.initState();
-
-    //Esta es la lista de productos general
-    Map<String, Product> products = {
-          "A":Product('Alfa', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.draft,"", 4000, 1800, 5),
-          "B":Product('Beta', 'Plata 925', 'Precioso Anillo', ProductCategory.bracalet, Status.active,"", 4000, 1800, 9),
-          "G":Product('Gamma', 'Plata 925', 'Precioso Anillo', ProductCategory.hat, Status.active,"", 4000, 1800, 12),
-          "D":Product('Delta', 'Plata 925', 'Precioso Anillo', ProductCategory.ring, Status.active,"", 4000, 1800, 15)
-    };
-
-    for(var entry in products.entries){
-      Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
-    }
     readLS();
+    /*if(saveUser.isEmpty){
+      setState(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Register()),
+        );
+      });
+    }*/
   }
 
   Future<void> readLS() async {
@@ -48,6 +44,7 @@ final List<User> saveUser = [];
     for(var entry in items!.entries){
       var user = User.fromJson(entry.value);
       saveUser.add(user);
+      print(user.userRole);
     }
   }
 

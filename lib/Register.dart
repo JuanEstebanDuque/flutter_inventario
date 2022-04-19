@@ -13,9 +13,16 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<Register> {
-  List<String> items = ['Administrador','Colaborador','Empleado'];
-  String view = 'Seleccione una opción';
+  //Necessary parameters for the DropdownButton of the user roles
+  List ListItem = [
+    'Administrador','Colaborador','Empleado'
+  ];
+  var valueChoose;
 
+  //User arrangement to check if the user to be created already exists
+  final List<User> checkUser = [];
+
+  //Parameters required to create a user
   String _userName = "";
   String _userLastName = "";
   String _userEmail = "";
@@ -23,8 +30,7 @@ class _RegisterScreenState extends State<Register> {
   String _checkPassword = "";
   String _userPhone = "";
   String _userCompany = "";
-
-  final List<User> checkUser = [];
+  int optionRole = 0;
 
   @override
   void initState() {
@@ -32,6 +38,7 @@ class _RegisterScreenState extends State<Register> {
     readLS();
   }
 
+  //Method that reads users that have already been created
   Future<void> readLS() async {
     final items = await Localstore.instance.collection('users').get();
     for (var entry in items!.entries) {
@@ -206,30 +213,48 @@ class _RegisterScreenState extends State<Register> {
                   },
                 ),
               ),
-              /*Padding(
+              Padding(
                 padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
-                child: DropdownButton<String>(
-                  value: view,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10,right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey,width: 1),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  onChanged: (String? newValue) {
+                  height: 63,
+                  alignment: Alignment.center,
+                  child: DropdownButton(
+                  hint: const Text("Seleccione una opción"),
+                  value: valueChoose,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 30,
+                  elevation: 16,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
+                  isExpanded: true,
+                  onChanged: (newValue) {
+                    if(newValue == "Administrador"){
+                        optionRole = 1;
+                      }if(newValue == "Colaborador"){
+                        optionRole = 2;
+                      }if(newValue == "Empleado"){
+                        optionRole = 3;
+                      }
                     setState(() {
-                    view = newValue!;
+                      valueChoose = newValue; 
                     });
                   },
-                  items: <String>['One', 'Two', 'Free', 'Four'].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+                  items: ListItem.map((valueItem){
+                    return DropdownMenuItem(
+                      value: valueItem,
+                      child: Text(valueItem),
                     );
                   }).toList(),
+                  ),
                 ),
-              ),*/
+                ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 15.0, right: 0.0, bottom: 10.0),
@@ -344,13 +369,22 @@ class _RegisterScreenState extends State<Register> {
     );
   }
 
+  
   int checkRegister(){
     int verifyRegister = -1;
-    if (_userName!="" && _userLastName!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="") {
+    if (_userName!="" && _userLastName!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="" && optionRole!=0) {
+      if(checkUser.isNotEmpty){
+        for (int i = 0; i < checkUser.length; i++) {
+          if (_userEmail == checkUser[i].userEmail) {
+            verifyRegister = 0;
+            return verifyRegister;                    
+          }
+        }
+      }
       if(_userPassword == _checkPassword){
         String randomKey = Uuid().v4();
         Map<String, User> users = {
-          randomKey: User(randomKey,_userName, _userLastName, _userEmail,_userPassword, _userPhone, 1),
+          randomKey: User(randomKey,_userName, _userLastName, _userEmail,_userPassword, _userPhone, optionRole),
         };
         for (var entry in users.entries) {
         Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());
@@ -362,14 +396,7 @@ class _RegisterScreenState extends State<Register> {
         verifyRegister = 2;
         return verifyRegister;
       }
-    } if(checkUser.isEmpty){
-      for (int i = 0; i < checkUser.length; i++) {
-        if (_userEmail == checkUser[i].userEmail) {
-          verifyRegister = 0;
-          return verifyRegister;                    
-        }
-      }
-    }
+    } 
     return verifyRegister;
   }
 }
