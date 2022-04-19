@@ -280,7 +280,7 @@ class _AddProductState extends State<AddProduct> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: (){
-                      //Localstore.instance.collection("products").doc().delete();
+                      Localstore.instance.collection("products").doc().delete();
                       if(checkRegisterProduct() == -1){
                         showDialog<String>(
                           context: context,
@@ -377,6 +377,19 @@ class _AddProductState extends State<AddProduct> {
           if (_nameProduct == widget.products[i].nameProduct) {
             verifyRegister = 0;
             return verifyRegister;                    
+          }else{
+            String randomKey = Uuid().v4();
+            Map<String, Product> users = {
+            randomKey: Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, "", _salePriceProduct, _productionPriceProduct, _quantityProduct),
+            };
+            for (var entry in users.entries) {
+              print(entry);
+              Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
+              print(Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson()));
+              //Localstore.instance.collection("products").doc().delete();
+            }
+            verifyRegister = 1;
+            return verifyRegister;
           }
         }
       }
@@ -385,8 +398,10 @@ class _AddProductState extends State<AddProduct> {
       randomKey: Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, "", _salePriceProduct, _productionPriceProduct, _quantityProduct),
       };
       for (var entry in users.entries) {
-      Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
-      //Localstore.instance.collection("products").doc().delete();
+        print(entry);
+        Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
+        print(Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson()));
+        //Localstore.instance.collection("products").doc().delete();
       }
       verifyRegister = 1;
       return verifyRegister;

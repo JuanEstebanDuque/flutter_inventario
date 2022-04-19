@@ -38,9 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> readLS() async {
     final items = await Localstore.instance.collection('products').get();
     for (var entry in items!.entries) {
+      print(entry);
       var product = Product.fromJson(entry.value);
       visibleProducts.add(product);
       print(product.nameProduct);
+      print(visibleProducts);
     }
   }
 
