@@ -48,6 +48,8 @@ class _Home extends State<Home> {
 
   var productSelected;
 
+  String _productToLookFor = "";
+
   Product _sendProductPage(int index) {
     var product;
     for (int i = 0; i < visibleProductsMinimum.length; i++) {
@@ -63,54 +65,79 @@ class _Home extends State<Home> {
     return Center(
       child: Stack(
         children: <Widget>[
-          GridView.builder(
-          padding: const EdgeInsets.only(left: 12, top: 10, right: 8, bottom: 10),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-          ),
-          itemCount: visibleProductsMinimum.length,
-          itemBuilder: (BuildContext context, int index) {
-            String price = "${visibleProductsMinimum[index].salePriceProduct}";
-            return GestureDetector(
-              onTap: (){
-                productSelected = _sendProductPage(index);
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => InfoProduct(productSelected)),
-                );
-              },
-              child: Card(
-              child: GridTile(
-                header: Text(
-                  visibleProductsMinimum[index].nameProduct,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13.5,
-                  ),
-                ),
-                footer: Text(
-                  price,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                child: Image.asset(
-                  'Anillo/_DAV9460-Editar.png',
-                  width: 100,
-                ),
-              ),
-              elevation: 5,
+          Padding(
+            padding: const EdgeInsets.only(top: 15,left: 15,right: 15,bottom: 15),
+            child: CupertinoSearchTextField(
+              autocorrect: true,
+              autofocus: true,
+              borderRadius: BorderRadius.circular(10),
+              placeholder: 'Buscar producto',
+              onChanged: searchProducts,
             ),
-            );
-          },
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 65,left: 12,right: 8,bottom: 10),
+            child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+            ),
+            itemCount: visibleProductsMinimum.length,
+            itemBuilder: (BuildContext context, int index) {
+              String price = "${visibleProductsMinimum[index].salePriceProduct}";
+              return GestureDetector(
+                onTap: (){
+                  productSelected = _sendProductPage(index);
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => InfoProduct(productSelected)),
+                  );
+                },
+                child: Card(
+                child: GridTile(
+                  header: Text(
+                    visibleProductsMinimum[index].nameProduct,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                    ),
+                  ),
+                  footer: Text(
+                    price,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                  child: Image.asset(
+                    'Anillo/_DAV9460-Editar.png',
+                    width: 100,
+                  ),
+                ),
+                elevation: 5,
+              ),
+              );
+            },
+            ),
+          ),
         ]
       ),
     );
   }
-}
+
+  void searchProducts (String search) {
+    final suggestion = visibleProductsMinimum.where((prdct) {
+      final productName = prdct.nameProduct.toLowerCase();
+      final input = search.toLowerCase();
+      return productName.contains(input);
+    }).toList();
+
+    setState(() => visibleProductsMinimum = suggestion);
+  }
+
+
+  } 
+

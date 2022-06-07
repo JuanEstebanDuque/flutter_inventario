@@ -100,6 +100,7 @@ class _AddProductState extends State<AddProduct> {
         elevation: 2,
       ),
       body: SingleChildScrollView(
+        
         child: Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0, bottom: 0.0),
           child: Center(
@@ -240,6 +241,7 @@ class _AddProductState extends State<AddProduct> {
                     }if(newValue == "Inactivo"){
                       _statusProduct = 2;
                     }
+                    print(_statusProduct);
                     setState(() {
                       valueChooseStatus = newValue; 
                     });
@@ -522,11 +524,12 @@ class _AddProductState extends State<AddProduct> {
         for (int i = 0; i < widget.products.length; i++) {
           if (_nameProduct == widget.products[i].nameProduct) {
             verifyRegister = 0;
+            return verifyRegister;
           }
-        } 
-      }else{
-        verifyRegister = 1;
+        }
       }
+      verifyRegister = 1;
+      return verifyRegister;
     } 
     return verifyRegister;
   }
@@ -536,7 +539,6 @@ class _AddProductState extends State<AddProduct> {
       String randomKey = const Uuid().v4();
       Product product = Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, /*image!,*/ _salePriceProduct, _productionPriceProduct, _quantityProduct);
       Localstore.instance.collection("products").doc(randomKey).set(product.toJson());
-      print("Guardé el producto!");
     }
   }
 
