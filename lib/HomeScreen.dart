@@ -1,21 +1,17 @@
 import 'package:first_proyect/AddProduct.dart';
-import 'package:first_proyect/Login.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/User.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 import 'Inventary.dart';
 import 'Home.dart';
 import 'Setting.dart';
 import 'Profile.dart';
-import 'Login.dart';
 import 'StatisticsReport.dart';
 import 'AddEmployeeCompany.dart';
-//import 'AddProduct.dart';
+import 'AddProduct.dart';
 
-//TODO: añadir arreglo de los productos aquí para que los lea
-
+// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget{
 
   List<User> user = [];
@@ -37,12 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> readLS() async {
     final items = await Localstore.instance.collection('products').get();
+
+    print("Leyendo products...");
+
+    print(items);
+
     for (var entry in items!.entries) {
       print(entry);
       var product = Product.fromJson(entry.value);
       visibleProducts.add(product);
-      print(product.nameProduct);
-      print(visibleProducts);
+      //print(product.nameProduct);
+      //print(visibleProducts);
     }
   }
 
@@ -145,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
+                  MaterialPageRoute(builder: (context) => Profile(widget.user)),
                 );
               },
             ),

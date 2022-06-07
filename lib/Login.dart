@@ -29,21 +29,22 @@ final List<User> saveUser = [];
   void initState() {
     super.initState();
     readLS();
-    /*if(saveUser.isEmpty){
+  }
+
+  Future<void> readLS() async {
+    final items = await Localstore.instance.collection('users').get();
+    if(items!.entries.isNotEmpty){
+      for(var entry in items.entries){
+        var user = User.fromJson(entry.value);
+        saveUser.add(user);
+      }
+    }else if(saveUser.isEmpty){
       setState(() {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Register()),
         );
       });
-    }*/
-  }
-
-  Future<void> readLS() async {
-    final items = await Localstore.instance.collection('users').get();
-    for(var entry in items!.entries){
-      var user = User.fromJson(entry.value);
-      saveUser.add(user);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'ProductCategory.dart';
 import 'Status.dart';
+import 'dart:io';
 
 class Product{
   //attributes
@@ -10,7 +11,7 @@ class Product{
   String _descriptionProduct = '';
   int _categoryProduct = 0;
   int _statusProduct = 0;
-  String _imagePathProduct = "";
+  //File? _imagePathProduct;
   double _salePriceProduct = 0;
   double _productionPriceProduct = 0;
   int _quantityProduct = 0;
@@ -18,14 +19,14 @@ class Product{
   //relations
 
   //methods
-  Product(String productId,String name,String material,String description,int category,int status,String imagePath,double salePrice,double productionPrice,int quantityProduct){
+  Product(String productId,String name,String material,String description,int category,int status,/*File imagePath,*/double salePrice,double productionPrice,int quantityProduct){
     _productId = productId;
     _nameProduct = name;
     _materialProduct = material;
     _descriptionProduct = description;
     _categoryProduct = category;
     _statusProduct = status;
-    _imagePathProduct = imagePath;
+    //_imagePathProduct = imagePath;
     _salePriceProduct = salePrice;
     _productionPriceProduct = productionPrice;
     _quantityProduct = quantityProduct;
@@ -79,13 +80,13 @@ class Product{
     return _statusProduct;
   }
 
-  void set imagePathProduct(String imagePathProduct){
+  /*void set imagePathProduct(File? imagePathProduct){
     _imagePathProduct = imagePathProduct;
   }
 
-  String get imagePathProduct{
+  File? get imagePathProduct{
     return _imagePathProduct;
-  }
+  }*/
 
   void set salePriceProduct(double salePriceProduct){
     _salePriceProduct = salePriceProduct;
@@ -119,7 +120,7 @@ class Product{
       "descriptionProduct": _descriptionProduct,
       "categoryProduct": _categoryProduct,
       "statusProduct": _statusProduct,
-      "imagePathProduct": _imagePathProduct,
+      //"imagePathProduct": _imagePathProduct,
       "salePriceProduct": _salePriceProduct,
       "productionPriceProduct": _productionPriceProduct,
       "quantityProduct": _quantityProduct,
@@ -134,7 +135,7 @@ class Product{
       map['descriptionProduct'], 
       map['categoryProduct'], 
       map['statusProduct'],
-      map['imagePathProduct'], 
+      //map['imagePathProduct'], 
       map['salePriceProduct'], 
       map['productionPriceProduct'], 
       map['quantityProduct']);

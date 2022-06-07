@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:first_proyect/HomeScreen.dart';
@@ -7,6 +8,8 @@ import 'package:localstore/localstore.dart';
 import 'package:uuid/uuid.dart';
 import 'model/Product.dart';
 import 'model/User.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AddProduct extends StatefulWidget {
   //Receive the arrangement of products already read in 'HomeScreen'.
@@ -18,6 +21,46 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+
+  File? image = null;
+  final picker = ImagePicker();
+
+  Future selectionImage(int option) async{
+    var pickedFile;
+    if(option == 1){
+      pickedFile = await picker.pickImage(source: ImageSource.camera);
+    }else{
+      pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    }
+    setState(() {
+      if(pickedFile != null){
+        image = File(pickedFile.path);
+      }else{
+        showDialog<String>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Imagen no seleccionada'),
+              content: const Text(
+                'Debe seleccionar una imagen para poder crear el producto.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                child: const Text(
+                  'Volver',
+                  style: TextStyle(fontSize: 16.0,color: Colors.red),
+                ),
+              ),
+            ],
+          );
+        });
+      }
+    });
+    Navigator.of(context).pop();
+  }
   
   //checklist to verify if the product to be added exists
   List<Product> checkProducts = [];
@@ -274,13 +317,115 @@ class _AddProductState extends State<AddProduct> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 15.0,bottom: 10.0),
+                  padding: const EdgeInsets.only(top: 10.0),
                   child: CupertinoButton(
                     disabledColor: const Color.fromRGBO(255, 152, 0, 1),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: (){
-                      Localstore.instance.collection("products").doc().delete();
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            contentPadding: const EdgeInsets.all(0),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      selectionImage(1);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: const BoxDecoration(
+                                        border: Border(bottom: BorderSide(width: 1, color: Colors.grey))
+                                      ),
+                                      child: Row(
+                                        children: const [
+                                          Expanded(
+                                            child: Text(
+                                              'Tomar foto',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                          Icon(Icons.camera_alt, color: Color.fromRGBO(255, 152, 0, 1))
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: (){
+                                      selectionImage(2);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Row(
+                                        children: const [
+                                          Expanded(
+                                            child: Text(
+                                              'Seleccionar foto',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                          Icon(Icons.image, color: Color.fromRGBO(255, 152, 0, 1))
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                      ),
+                                      child: Row(
+                                        children: const [
+                                          Expanded(
+                                            child: Text(
+                                              'Cancelar',
+                                              style: TextStyle(fontSize: 16,color: Colors.white),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                    },
+                    child: const Text(
+                      'Seleccionar imagen',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    color: const Color.fromRGBO(255, 152, 0, 1),
+                  ),
+                ),
+                if(image != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: SizedBox(
+                      height: 300,
+                      child: image != null ? Image.file(image!) : const Center(),
+                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 15.0,bottom: 15.0),
+                  child: CupertinoButton(
+                    disabledColor: const Color.fromRGBO(255, 152, 0, 1),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    pressedOpacity: 0.85,
+                    onPressed: (){
+                      //Localstore.instance.collection("products").doc().delete();
                       if(checkRegisterProduct() == -1){
                         showDialog<String>(
                           context: context,
@@ -326,6 +471,7 @@ class _AddProductState extends State<AddProduct> {
                           );
                         });
                       }else if(checkRegisterProduct() == 1){
+                        saveProduct(1);
                         showDialog<String>(
                           context: context,
                           barrierDismissible: false,
@@ -371,42 +517,27 @@ class _AddProductState extends State<AddProduct> {
 
   int checkRegisterProduct(){
     int verifyRegister = -1;
-    if (_nameProduct!="" && _materialProduct!="" && _descriptionProduct!="" && _categoryProduct!=0 && _statusProduct!=0 && /*_imagePathProduct!="" &&*/ _salePriceProduct!=0 && _productionPriceProduct!=0 && _quantityProduct!=0) {
+    if (_nameProduct!="" && _materialProduct!="" && _descriptionProduct!="" && _categoryProduct!=0 && _statusProduct!=0 && _salePriceProduct!=0 && _productionPriceProduct!=0 && _quantityProduct!=0) {
       if(widget.products.isNotEmpty){
         for (int i = 0; i < widget.products.length; i++) {
           if (_nameProduct == widget.products[i].nameProduct) {
             verifyRegister = 0;
-            return verifyRegister;                    
-          }else{
-            String randomKey = Uuid().v4();
-            Map<String, Product> users = {
-            randomKey: Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, "", _salePriceProduct, _productionPriceProduct, _quantityProduct),
-            };
-            for (var entry in users.entries) {
-              print(entry);
-              Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
-              print(Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson()));
-              //Localstore.instance.collection("products").doc().delete();
-            }
-            verifyRegister = 1;
-            return verifyRegister;
           }
-        }
+        } 
+      }else{
+        verifyRegister = 1;
       }
-      String randomKey = Uuid().v4();
-      Map<String, Product> users = {
-      randomKey: Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, "", _salePriceProduct, _productionPriceProduct, _quantityProduct),
-      };
-      for (var entry in users.entries) {
-        print(entry);
-        Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson());
-        print(Localstore.instance.collection("products").doc(entry.key).set(entry.value.toJson()));
-        //Localstore.instance.collection("products").doc().delete();
-      }
-      verifyRegister = 1;
-      return verifyRegister;
     } 
     return verifyRegister;
+  }
+
+  void saveProduct(int option){
+    if(option == 1){
+      String randomKey = const Uuid().v4();
+      Product product = Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, /*image!,*/ _salePriceProduct, _productionPriceProduct, _quantityProduct);
+      Localstore.instance.collection("products").doc(randomKey).set(product.toJson());
+      print("Guardé el producto!");
+    }
   }
 
 }

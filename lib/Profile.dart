@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'model/User.dart';
+
 class Profile extends StatefulWidget{
-  const Profile({Key? key}):super(key: key);
+  List<User> user = [];
+  Profile(this.user,{Key? key}):super(key: key);
   @override
   State<Profile> createState() => _Profile();
 }

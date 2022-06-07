@@ -170,6 +170,16 @@ class _InfoProductState extends State<InfoProduct> {
                     ),
                   ),
                 ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    child: SizedBox(
+                      height: 300,
+                      child: widget.productSelected.imagePathProduct == null ? const Center() : Image.file(widget.productSelected.imagePathProduct!),
+                    )
+                  ),
+                ),
               ],
             ),
           ),
