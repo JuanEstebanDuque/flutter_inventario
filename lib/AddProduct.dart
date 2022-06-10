@@ -15,7 +15,8 @@ class AddProduct extends StatefulWidget {
   //Receive the arrangement of products already read in 'HomeScreen'.
   List<Product> products = [];
   List<User> users = [];
-  AddProduct(this.products,this.users,{ Key? key }) : super(key: key);
+  String userSelected;
+  AddProduct(this.products,this.users,this.userSelected,{ Key? key }) : super(key: key);
   @override
   State<AddProduct> createState() => _AddProductState();
 }
@@ -24,6 +25,7 @@ class _AddProductState extends State<AddProduct> {
 
   File? image = null;
   final picker = ImagePicker();
+  String imagePath = "";
 
   Future selectionImage(int option) async{
     var pickedFile;
@@ -35,6 +37,7 @@ class _AddProductState extends State<AddProduct> {
     setState(() {
       if(pickedFile != null){
         image = File(pickedFile.path);
+        imagePath = image!.path;
       }else{
         showDialog<String>(
           context: context,
@@ -83,7 +86,6 @@ class _AddProductState extends State<AddProduct> {
   String _descriptionProduct = "";
   int _categoryProduct = 0;
   int _statusProduct = 0;
-  String _imagePathProduct = "";
   double _salePriceProduct =0;
   double _productionPriceProduct = 0;
   int _quantityProduct = 0;
@@ -241,7 +243,6 @@ class _AddProductState extends State<AddProduct> {
                     }if(newValue == "Inactivo"){
                       _statusProduct = 2;
                     }
-                    print(_statusProduct);
                     setState(() {
                       valueChooseStatus = newValue; 
                     });
@@ -416,7 +417,8 @@ class _AddProductState extends State<AddProduct> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: SizedBox(
-                      height: 300,
+                      width: double.infinity,
+                      height: 250,
                       child: image != null ? Image.file(image!) : const Center(),
                     ),
                 ),
@@ -487,7 +489,7 @@ class _AddProductState extends State<AddProduct> {
                                 onPressed: () {
                                   Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HomeScreen(widget.users)),
+                                  MaterialPageRoute(builder: (context) => HomeScreen(widget.users,widget.userSelected)),
                                   );
                                   },
                                   child: const Text(
@@ -537,7 +539,7 @@ class _AddProductState extends State<AddProduct> {
   void saveProduct(int option){
     if(option == 1){
       String randomKey = const Uuid().v4();
-      Product product = Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, /*image!,*/ _salePriceProduct, _productionPriceProduct, _quantityProduct);
+      Product product = Product(randomKey, _nameProduct, _materialProduct, _descriptionProduct, _categoryProduct, _statusProduct, imagePath, _salePriceProduct, _productionPriceProduct, _quantityProduct);
       Localstore.instance.collection("products").doc(randomKey).set(product.toJson());
     }
   }

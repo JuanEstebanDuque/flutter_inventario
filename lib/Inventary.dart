@@ -61,6 +61,7 @@ class _Inventary extends State<Inventary> {
               crossAxisCount: 2,
               mainAxisSpacing: 5,
               crossAxisSpacing: 5,
+              mainAxisExtent: 230,
             ),
             itemCount: visibleProducts.length,
             itemBuilder: (BuildContext context, int index) {
@@ -75,25 +76,39 @@ class _Inventary extends State<Inventary> {
                 },
                 child: Card(
                 child: GridTile(
-                  header: Text(
-                    visibleProducts[index].nameProduct,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13.5,
-                    ),
-                  ),
-                  footer: Text(
-                    price,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                  child: Image.asset(
-                    'Anillo/_DAV9460-Editar.png',
-                    width: 100,
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Image.asset(
+                          'Anillo/_DAV9460-Editar.png',
+                          width: 210,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2, bottom: 3),
+                        child: Text(
+                          visibleProducts[index].nameProduct,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 3),
+                        child: Text(
+                          price,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 elevation: 5,
@@ -108,16 +123,24 @@ class _Inventary extends State<Inventary> {
   }
 
   void searchProducts (String search) {
-    final suggestion = visibleProducts.where((Product){
-      return Product.nameProduct.toLowerCase().contains(search.toLowerCase());
-    }).toList();
-    setState(() {
-      visibleProducts = suggestion;
-    });
+  if(search != ""){
+      final suggestion = visibleProducts.where((prdct) {
+        final productName = prdct.nameProduct.toLowerCase();
+        final input = search.toLowerCase();
+        return productName.contains(input);
+      }).toList();
+      setState(() => visibleProducts = suggestion);
+    } else {
+      setState((){
+        visibleProducts.clear();
+        for (int i = 0; i < widget.products.length; i++) {
+          visibleProducts.add(widget.products[i]);
+        }
+      });
+    }
   }
 
 }
-
 
 
   

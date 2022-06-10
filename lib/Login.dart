@@ -8,9 +8,6 @@ import 'package:localstore/localstore.dart';
 import 'HomeScreen.dart';
 import 'Register.dart';
 import 'ForgotPassword.dart';
-import 'model/Product.dart';
-import 'model/ProductCategory.dart';
-import 'model/Status.dart';
 import 'model/User.dart';
 
 class Login extends StatefulWidget{
@@ -32,7 +29,7 @@ final List<User> saveUser = [];
   }
 
   Future<void> readLS() async {
-    final items = await Localstore.instance.collection('users').get();
+    final items = await Localstore.instance.collection("users").get();
     if(items!.entries.isNotEmpty){
       for(var entry in items.entries){
         var user = User.fromJson(entry.value);
@@ -156,7 +153,7 @@ final List<User> saveUser = [];
                       if(verifyLogin() == 0){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen(saveUser)),
+                          MaterialPageRoute(builder: (context) => HomeScreen(saveUser, _userEmail)),
                         );
                       } else if (verifyLogin() == -1){
                         showDialog<String>(

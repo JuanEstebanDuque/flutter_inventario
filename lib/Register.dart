@@ -19,18 +19,25 @@ class _RegisterScreenState extends State<Register> {
   ];
   var valueChoose;
 
+  List ListItem2 = [
+    'Hombre','Mujer'
+  ];
+  var valueChoose2;
+
   //User arrangement to check if the user to be created already exists
   final List<User> checkUser = [];
 
   //Parameters required to create a user
   String _userName = "";
   String _userLastName = "";
+  String _userId = "";
   String _userEmail = "";
   String _userPassword = "";
   String _checkPassword = "";
   String _userPhone = "";
   String _userCompany = "";
-  int optionRole = 0;
+  int _userSex = 0;
+  int _optionRole = 0;
 
   @override
   void initState() {
@@ -100,6 +107,28 @@ class _RegisterScreenState extends State<Register> {
                   onChanged: (String lastNameRegister) {
                     setState(() {
                       _userLastName = lastNameRegister;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
+                child: TextField(
+                  autofocus: true,
+                  autocorrect: true,
+                  keyboardType: TextInputType.number,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    //labelText: 'Apellido',
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Identificación',
+                  ),
+                  onChanged: (String idRegister) {
+                    setState(() {
+                      _userId = idRegister;
                     });
                   },
                 ),
@@ -225,6 +254,46 @@ class _RegisterScreenState extends State<Register> {
                   alignment: Alignment.center,
                   child: DropdownButton(
                   hint: const Text("Seleccione una opción"),
+                  value: valueChoose2,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 30,
+                  elevation: 16,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
+                  isExpanded: true,
+                  onChanged: (newValue) {
+                    if(newValue == "Hombre"){
+                        _userSex = 1;
+                      }if(newValue == "Mujer"){
+                        _userSex = 2;
+                      }
+                    setState(() {
+                      valueChoose2 = newValue; 
+                    });
+                  },
+                  items: ListItem2.map((valueItem){
+                    return DropdownMenuItem(
+                      value: valueItem,
+                      child: Text(valueItem),
+                    );
+                  }).toList(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10,right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey,width: 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  height: 63,
+                  alignment: Alignment.center,
+                  child: DropdownButton(
+                  hint: const Text("Seleccione una opción"),
                   value: valueChoose,
                   icon: const Icon(Icons.arrow_drop_down),
                   iconSize: 30,
@@ -236,11 +305,11 @@ class _RegisterScreenState extends State<Register> {
                   isExpanded: true,
                   onChanged: (newValue) {
                     if(newValue == "Administrador"){
-                        optionRole = 1;
+                        _optionRole = 1;
                       }if(newValue == "Colaborador"){
-                        optionRole = 2;
+                        _optionRole = 2;
                       }if(newValue == "Empleado"){
-                        optionRole = 3;
+                        _optionRole = 3;
                       }
                     setState(() {
                       valueChoose = newValue; 
@@ -254,7 +323,7 @@ class _RegisterScreenState extends State<Register> {
                   }).toList(),
                   ),
                 ),
-                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 15.0, right: 0.0, bottom: 10.0),
@@ -372,7 +441,7 @@ class _RegisterScreenState extends State<Register> {
   
   int checkRegister(){
     int verifyRegister = -1;
-    if (_userName!="" && _userLastName!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="" && optionRole!=0) {
+    if (_userName!="" && _userLastName!="" && _userId!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="" && _userSex!=0 && _optionRole!=0) {
       if(checkUser.isNotEmpty){
         for (int i = 0; i < checkUser.length; i++) {
           if (_userEmail == checkUser[i].userEmail) {
@@ -384,7 +453,7 @@ class _RegisterScreenState extends State<Register> {
       if(_userPassword == _checkPassword){
         String randomKey = Uuid().v4();
         Map<String, User> users = {
-          randomKey: User(randomKey,_userName, _userLastName, _userEmail,_userPassword, _userPhone, optionRole),
+          randomKey: User(randomKey,_userName, _userLastName, _userId, _userEmail,_userPassword, _userPhone, _userSex, _optionRole, _userCompany),
         };
         for (var entry in users.entries) {
         Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());

@@ -15,7 +15,8 @@ import 'AddProduct.dart';
 class HomeScreen extends StatefulWidget{
 
   List<User> user = [];
-  HomeScreen(this.user, {Key? key}):super(key: key);
+  String userEmailSelected;
+  HomeScreen(this.user, this.userEmailSelected, {Key? key}):super(key: key);
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -23,12 +24,18 @@ class HomeScreen extends StatefulWidget{
 class _HomeScreenState extends State<HomeScreen> {
   List<Product> visibleProducts = [];
 
+  Color primaryColor = const Color.fromRGBO(255, 152, 0, 1);
+  Color textColor = Colors.black;
+
+  int currentPage = 0;
+
   @override
   void initState(){
     super.initState();
     _userNameAdmin = _showInfoAdmin(0);
     _userEmialAdmin = _showInfoAdmin(1);
     readLS();
+    _screenSelected(0);
   }
 
   Future<void> readLS() async {
@@ -41,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String _userNameAdmin = "";
   String _userEmialAdmin = "";
-
-  int currentPage = 0;
 
   _screenSelected(int pos){
     switch(pos){
@@ -63,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
     String name = "";
     String email = "";
     for(int i=0;i<widget.user.length;i++){
-      if(widget.user[i].userRole == 1){
+      if(widget.user[i].userEmail == widget.userEmailSelected){
         if(prefer == 0){
-          name = widget.user[i].userName;
+          name = widget.user[i].userName + "" + widget.user[i].userLastName;
           return name;
         } else if (prefer == 1){
           email = widget.user[i].userEmail;
@@ -80,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:const  Color.fromRGBO(255, 152, 0, 1),
+        backgroundColor: primaryColor,
         title: Text(
           _showNamePage(currentPage),
           style: const TextStyle(
@@ -126,10 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Setting()),
+                  MaterialPageRoute(builder: (context) => Setting(widget.user,widget.userEmailSelected)),
                 );
               },
             ),
+            const Divider(
+                color: Color.fromRGBO(158, 158, 158, 0.3),
+                height: 5,
+                thickness: 1.5,
+                indent: 10,
+                endIndent: 10,
+              ),
             ListTile(
               title: const Text('Perfil'),
               leading: const Icon(Icons.account_circle,
@@ -138,10 +150,17 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(widget.user)),
+                  MaterialPageRoute(builder: (context) => Profile(widget.user,widget.userEmailSelected)),
                 );
               },
             ),
+            const Divider(
+                color: Color.fromRGBO(158, 158, 158, 0.3),
+                height: 5,
+                thickness: 1.5,
+                indent: 10,
+                endIndent: 10,
+              ),
             ListTile(
               title: const Text('Informe y estadística'),
               leading: const Icon(Icons.bar_chart_rounded,
@@ -154,6 +173,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            const Divider(
+                color: Color.fromRGBO(158, 158, 158, 0.3),
+                height: 5,
+                thickness: 1.5,
+                indent: 10,
+                endIndent: 10,
+              ),
             ListTile(
               title: const Text('Añadir empleado'),
               leading: const Icon(Icons.person_add_alt_sharp,
@@ -199,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        backgroundColor: primaryColor,
         autofocus: true,
         highlightElevation: 20,
         child: const Icon(
@@ -209,11 +235,12 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: (){
           Navigator.push(
             context, 
-            MaterialPageRoute(builder: (context) => AddProduct(visibleProducts,widget.user)),
+            MaterialPageRoute(builder: (context) => AddProduct(visibleProducts,widget.user,widget.userEmailSelected)),
           );
         },
         elevation: 10,
       ),
     );
   }
+
 }
