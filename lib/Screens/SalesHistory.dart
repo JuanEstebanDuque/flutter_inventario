@@ -16,7 +16,13 @@ class _SalesHistory extends State<SalesHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historial de ventas'),
+        title: const Text(
+          'Historial de ventas',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20.0,
+          ),
+        ),
         backgroundColor: primaryColor,
       ),
     );

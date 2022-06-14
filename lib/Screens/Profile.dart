@@ -71,7 +71,6 @@ class _Profile extends State<Profile>{
                   'Mi usuario.',
                   style: TextStyle(
                     fontSize: 23,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -118,7 +117,7 @@ class _Profile extends State<Profile>{
                     hintText: widget.user[profileSelected].userName,
                     hintStyle: TextStyle(
                       fontSize: 15,
-                      color: Colors.grey[600],
+                      color: Colors.grey[700],
                     ),
                   ),
                   onChanged: (String nameRegister) {
@@ -159,7 +158,7 @@ class _Profile extends State<Profile>{
                     hintText: widget.user[profileSelected].userLastName,
                     hintStyle: TextStyle(
                       fontSize: 15,
-                      color: Colors.grey[600],
+                      color: Colors.grey[700],
                     ),
                   ),
                   onChanged: (String lastNameRegister) {
@@ -200,7 +199,7 @@ class _Profile extends State<Profile>{
                     hintText: widget.user[profileSelected].userId,
                     hintStyle: TextStyle(
                       fontSize: 15,
-                      color: Colors.grey[600],
+                      color: Colors.grey[700],
                     ),
                   ),
                   onChanged: (String idRegister) {
@@ -232,6 +231,10 @@ class _Profile extends State<Profile>{
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: widget.user[profileSelected].userEmail,
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.red,
+                    ),
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[900],
@@ -272,7 +275,7 @@ class _Profile extends State<Profile>{
                     hintText: widget.user[profileSelected].userPhone,
                     hintStyle: TextStyle(
                       fontSize: 15,
-                      color: Colors.grey[600],
+                      color: Colors.grey[700],
                     ),
                   ),
                   onChanged: (String phoneRegister) {
@@ -304,6 +307,10 @@ class _Profile extends State<Profile>{
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: _sexProfile,
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.red,
+                    ),
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[900],
@@ -335,6 +342,10 @@ class _Profile extends State<Profile>{
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: _roleProfile,
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.red,
+                    ),
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[900],
@@ -366,6 +377,10 @@ class _Profile extends State<Profile>{
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: widget.user[profileSelected].userCompany,
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.red,
+                    ),
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[900],

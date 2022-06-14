@@ -8,7 +8,6 @@ import 'package:localstore/localstore.dart';
 import 'HomeScreen.dart';
 import 'Register.dart';
 import 'ForgotPassword.dart';
-import 'package:first_proyect/model/User.dart';
 
 class Login extends StatefulWidget{
   const Login({Key? key}) : super(key: key);
