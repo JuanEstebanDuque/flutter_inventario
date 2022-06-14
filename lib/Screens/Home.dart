@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:first_proyect/InfoProduct.dart';
+import 'InfoProduct.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +10,8 @@ import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/Status.dart';
 import 'package:localstore/localstore.dart';
 
-import 'model/ProductCategory.dart';
-import 'AddProduct.dart';
+import 'package:first_proyect/model/ProductCategory.dart';
+import 'package:first_proyect/Screens/AddProduct.dart';
 
 class Home extends StatefulWidget {
   List<Product> products = [];
@@ -92,7 +92,7 @@ class _Home extends State<Home> {
                     children: <Widget>[
                       Expanded(
                         child: Image.asset(
-                          'Anillo/_DAV9460-Editar.png',
+                          'Assets/_DAV9460-Editar.png',
                           width: 210,
                           height: 200,
                           fit: BoxFit.cover,

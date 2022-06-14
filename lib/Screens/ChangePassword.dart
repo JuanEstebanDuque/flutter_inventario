@@ -1,14 +1,15 @@
-import 'package:first_proyect/HomeScreen.dart';
-import 'package:first_proyect/Login.dart';
+import 'Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 
 import '../model/User.dart';
 
+// ignore: must_be_immutable
 class ChangePassword extends StatefulWidget {
+  List<User> user = [];
   String userEmailSelected;
-  ChangePassword(this.userEmailSelected,{Key? key}) : super(key: key);
+  ChangePassword(this.user,this.userEmailSelected,{Key? key}) : super(key: key);
   @override
   State<ChangePassword> createState() => _ChangePassword();
 }
@@ -19,16 +20,12 @@ class _ChangePassword extends State<ChangePassword>{
   @override
   void initState() {
     super.initState();
-    readLS();
+    addUserToArray();
   }
 
-  Future<void> readLS() async {
-    final items = await Localstore.instance.collection('users').get();
-    if(items!.entries.isNotEmpty){
-      for(var entry in items.entries){
-        var user = User.fromJson(entry.value);
-        users.add(user);
-      }
+  void addUserToArray(){
+    for(int i=0;i<widget.user.length;i++){
+      users.add(widget.user[i]);
     }
   }
 
@@ -86,7 +83,6 @@ class _ChangePassword extends State<ChangePassword>{
                 Padding(
                   padding: const EdgeInsets.only(top: 20,bottom: 15),
                   child: TextField(
-                    autofocus: true,
                     autocorrect: true,
                     keyboardType: TextInputType.name,
                     obscureText: false,
@@ -106,7 +102,6 @@ class _ChangePassword extends State<ChangePassword>{
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: TextField(
-                    autofocus: true,
                     autocorrect: true,
                     keyboardType: TextInputType.name,
                     obscureText: false,

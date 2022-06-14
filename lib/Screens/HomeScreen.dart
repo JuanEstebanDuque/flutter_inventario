@@ -1,4 +1,5 @@
-import 'package:first_proyect/AddProduct.dart';
+import 'package:first_proyect/Screens/AddProduct.dart';
+import 'package:first_proyect/Screens/SalesHistory.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/User.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'Setting.dart';
 import 'Profile.dart';
 import 'StatisticsReport.dart';
 import 'AddEmployeeCompany.dart';
-import 'AddProduct.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget{
@@ -18,10 +18,10 @@ class HomeScreen extends StatefulWidget{
   String userEmailSelected;
   HomeScreen(this.user, this.userEmailSelected, {Key? key}):super(key: key);
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreen();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreen extends State<HomeScreen> {
   List<Product> visibleProducts = [];
 
   Color primaryColor = const Color.fromRGBO(255, 152, 0, 1);
@@ -162,6 +162,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 endIndent: 10,
               ),
             ListTile(
+              title: const Text('Añadir empleado'),
+              leading: const Icon(Icons.person_add_alt_sharp,
+                color: Colors.black,
+              ),
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddEmployeeCompany()),
+                );
+              },
+            ),
+            const Divider(
+                color: Color.fromRGBO(158, 158, 158, 0.3),
+                height: 5,
+                thickness: 1.5,
+                indent: 10,
+                endIndent: 10,
+              ),
+            ListTile(
               title: const Text('Informe y estadística'),
               leading: const Icon(Icons.bar_chart_rounded,
                 color: Colors.black,
@@ -181,14 +200,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 endIndent: 10,
               ),
             ListTile(
-              title: const Text('Añadir empleado'),
-              leading: const Icon(Icons.person_add_alt_sharp,
+              title: const Text('Historial de ventas'),
+              leading: const Icon(Icons.history,
                 color: Colors.black,
               ),
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddEmployeeCompany()),
+                  MaterialPageRoute(builder: (context) => SalesHistory(visibleProducts)),
                 );
               },
             ),

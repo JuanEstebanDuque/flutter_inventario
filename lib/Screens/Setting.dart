@@ -1,11 +1,11 @@
-import 'package:first_proyect/Login.dart';
+import 'Login.dart';
 import 'package:first_proyect/Screens/ManageUsers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 
-import 'Screens/ChangePassword.dart';
-import 'model/User.dart';
+import 'ChangePassword.dart';
+import 'package:first_proyect/model/User.dart';
 
 class Setting extends StatefulWidget{
   List<User> user = [];
@@ -42,7 +42,7 @@ class _Setting extends State<Setting>{
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChangePassword(widget.userEmailSelected)),
+                    MaterialPageRoute(builder: (context) => ChangePassword(widget.user,widget.userEmailSelected)),
                   );
                 },
               ),

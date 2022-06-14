@@ -7,10 +7,10 @@ class InfoProduct extends StatefulWidget {
   InfoProduct(this.productSelected, { Key? key }) : super(key: key);
 
   @override
-  State<InfoProduct> createState() => _InfoProductState();
+  State<InfoProduct> createState() => _InfoProduct();
 }
 
-class _InfoProductState extends State<InfoProduct> {
+class _InfoProduct extends State<InfoProduct> {
   String category = "";
   String status = "";
 
@@ -70,7 +70,7 @@ class _InfoProductState extends State<InfoProduct> {
             child: Column(
               children: <Widget>[
                 Image.asset(
-                  'Anillo/_DAV9460-Editar.png',
+                  'Assets/_DAV9460-Editar.png',
                   width: 500,
                 ),
                 Align(

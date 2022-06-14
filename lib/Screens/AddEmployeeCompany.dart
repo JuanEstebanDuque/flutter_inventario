@@ -4,10 +4,10 @@ class AddEmployeeCompany extends StatefulWidget {
   const AddEmployeeCompany({ Key? key }) : super(key: key);
 
   @override
-  State<AddEmployeeCompany> createState() => _AddEmployeeCompanyState();
+  State<AddEmployeeCompany> createState() => _AddEmployeeCompany();
 }
 
-class _AddEmployeeCompanyState extends State<AddEmployeeCompany> {
+class _AddEmployeeCompany extends State<AddEmployeeCompany> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

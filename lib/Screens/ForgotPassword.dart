@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Login.dart';
-import 'model/User.dart';
+import 'package:first_proyect/model/Product.dart';
+import 'package:first_proyect/model/User.dart';
 
 class ForgotPassword extends StatefulWidget {
   List<User> user = [];
@@ -38,7 +39,7 @@ class _ForgotPassword extends State<ForgotPassword> {
         child: Center(
           child: Padding(
             padding:
-              const EdgeInsets.only(left: 20.0, top: 250.0, right: 20.0, bottom: 0.0),
+              const EdgeInsets.only(left: 20.0, top: 240.0, right: 20.0, bottom: 0.0),
             child: Column(
               children: <Widget>[
                 const Align(
@@ -56,16 +57,23 @@ class _ForgotPassword extends State<ForgotPassword> {
                   padding: const EdgeInsets.only(
                     left: 0.0, top: 15.0, right: 0.0, bottom: 15.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
                     obscureText: false,
+                    style: const TextStyle(
+                      fontSize: 17
+                    ),
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       //labelText: 'Correo electrónico',
                       fillColor: Colors.grey[290],
                       filled: true,
                       hintText: 'Correo electrónico',
+                      hintStyle: TextStyle(
+                        fontSize: 17,
+                        color: Colors.grey[700],
+                      ),
                     ),
                     onChanged: (String emailRecoverPassword){
                       setState(() {

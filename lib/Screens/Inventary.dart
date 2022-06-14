@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
-import 'model/Product.dart';
+import 'package:first_proyect/model/Product.dart';
 import 'InfoProduct.dart';
-import 'AddProduct.dart';
+import 'package:first_proyect/Screens/AddProduct.dart';
 
 class Inventary extends StatefulWidget{
   List<Product> products = [];
@@ -80,7 +80,7 @@ class _Inventary extends State<Inventary> {
                     children: <Widget>[
                       Expanded(
                         child: Image.asset(
-                          'Anillo/_DAV9460-Editar.png',
+                          'Assets/_DAV9460-Editar.png',
                           width: 210,
                           height: 200,
                           fit: BoxFit.cover,

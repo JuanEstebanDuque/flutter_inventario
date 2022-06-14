@@ -8,7 +8,7 @@ import 'package:localstore/localstore.dart';
 import 'HomeScreen.dart';
 import 'Register.dart';
 import 'ForgotPassword.dart';
-import 'model/User.dart';
+import 'package:first_proyect/model/User.dart';
 
 class Login extends StatefulWidget{
   const Login({Key? key}) : super(key: key);
@@ -51,17 +51,25 @@ final List<User> saveUser = [];
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(left: 20.0,top: 280.0,right: 20.0,bottom: 0.0),
+            padding: const EdgeInsets.only(left: 20.0,top: 135.0,right: 20.0,bottom: 0.0),
             child: Column(
               children: <Widget>[
-                const Text(
-                  'Iniciar Sesión',
-                  style: TextStyle(fontSize: 32),
+                Image.asset(
+                  'Assets/AnarchyStoresLogo1.png',
+                  width: 350,
+                  height: 140,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 43.0),
+                  child: Text(
+                    'Iniciar Sesión',
+                    style: TextStyle(fontSize: 32),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5.0,top: 12.0,right: 5.0,bottom: 0.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
                     obscureText: false,
@@ -151,10 +159,10 @@ final List<User> saveUser = [];
                     pressedOpacity: 0.85,
                     onPressed: () {
                       if(verifyLogin() == 0){
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => HomeScreen(saveUser, _userEmail)),
-                        );
+                        (Route<dynamic> route) => false);
                       } else if (verifyLogin() == -1){
                         showDialog<String>(
                         context: context,

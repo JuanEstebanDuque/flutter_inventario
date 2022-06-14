@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'model/User.dart';
+import 'package:first_proyect/model/User.dart';
 import 'package:localstore/localstore.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,6 +14,10 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<Register> {
+  var idFormatter = MaskTextInputFormatter(mask: '##########', filter: { "#": RegExp(r'[0-9]') });
+  var phoneFormatter = MaskTextInputFormatter(mask: '##########', filter: { "#": RegExp(r'[0-9]') });
+
+
   //Necessary parameters for the DropdownButton of the user roles
   List ListItem = [
     'Administrador','Colaborador','Empleado'
@@ -72,13 +77,13 @@ class _RegisterScreenState extends State<Register> {
           child: Column(
             children: <Widget>[
               TextField(
-                autofocus: true,
+                autofocus: false,
+                textCapitalization: TextCapitalization.sentences,
                 autocorrect: true,
                 keyboardType: TextInputType.name,
                 obscureText: false,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  //labelText: 'Nombre',
                   fillColor: Colors.grey[290],
                   filled: true,
                   hintText: 'Nombre',
@@ -93,16 +98,16 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  autofocus: true,
+                  autofocus: false,
+                  textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
                   keyboardType: TextInputType.name,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Apellido',
                     fillColor: Colors.grey[290],
                     filled: true,
-                    hintText: 'Apellido',
+                    hintText: 'Apellidos',
                   ),
                   onChanged: (String lastNameRegister) {
                     setState(() {
@@ -115,13 +120,13 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  autofocus: true,
+                  inputFormatters: [idFormatter],
+                  autofocus: false,
                   autocorrect: true,
                   keyboardType: TextInputType.number,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Apellido',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Identificación',
@@ -137,13 +142,12 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  autofocus: true,
+                  autofocus: false,
                   autocorrect: true,
                   keyboardType: TextInputType.emailAddress,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Correo',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Correo',
@@ -159,12 +163,11 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
                 child: TextField(
                   autocorrect: true,
-                  autofocus: true,
+                  autofocus: false,
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Contraseña',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Contraseña',
@@ -180,13 +183,12 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  autofocus: true,
+                  autofocus: false,
                   autocorrect: true,
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Confirmar contraseña',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Confimar contraseña',
@@ -202,13 +204,13 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  autofocus: true,
+                  inputFormatters: [phoneFormatter],
+                  autofocus: false,
                   autocorrect: true,
                   keyboardType: TextInputType.number,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Número de celular',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Número de teléfono',
@@ -224,13 +226,13 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  autofocus: true,
+                  autofocus: false,
+                  textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
                   keyboardType: TextInputType.text,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Nombre de la empresa',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Nombre de la empresa'
@@ -441,7 +443,7 @@ class _RegisterScreenState extends State<Register> {
   
   int checkRegister(){
     int verifyRegister = -1;
-    if (_userName!="" && _userLastName!="" && _userId!="" && _userEmail!="" && _userPassword!="" && _checkPassword!="" && _userPhone!="" && _userCompany!="" && _userSex!=0 && _optionRole!=0) {
+    if (_userName!="" && _userLastName!="" && _userId!="" && _userEmail!="" && _userPassword!="" && _userPassword.length>=6 && _checkPassword!="" && _checkPassword.length>=6 && _userPhone!="" && _userCompany!="" && _userSex!=0 && _optionRole!=0) {
       if(checkUser.isNotEmpty){
         for (int i = 0; i < checkUser.length; i++) {
           if (_userEmail == checkUser[i].userEmail) {

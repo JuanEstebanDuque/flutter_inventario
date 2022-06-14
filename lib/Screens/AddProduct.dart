@@ -1,13 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:first_proyect/HomeScreen.dart';
+import 'HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 import 'package:uuid/uuid.dart';
-import 'model/Product.dart';
-import 'model/User.dart';
+import '../model/Product.dart';
+import '../model/User.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -18,10 +18,10 @@ class AddProduct extends StatefulWidget {
   String userSelected;
   AddProduct(this.products,this.users,this.userSelected,{ Key? key }) : super(key: key);
   @override
-  State<AddProduct> createState() => _AddProductState();
+  State<AddProduct> createState() => _AddProduct();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddProduct extends State<AddProduct> {
 
   File? image = null;
   final picker = ImagePicker();
@@ -109,13 +109,13 @@ class _AddProductState extends State<AddProduct> {
             child: Column(
               children: <Widget>[
                 TextField(
-                  autofocus: true,
+                  autofocus: false,
+                  textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
                   keyboardType: TextInputType.name,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    //labelText: 'Nombre',
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Nombre del producto',
@@ -129,13 +129,13 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
+                    textCapitalization: TextCapitalization.sentences,
                     autocorrect: true,
                     keyboardType: TextInputType.name,
                     obscureText: false,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      //labelText: 'Nombre',
                       fillColor: Colors.grey[290],
                       filled: true,
                       hintText: 'Material del producto',
@@ -150,13 +150,13 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
+                    textCapitalization: TextCapitalization.sentences,
                     autocorrect: true,
                     keyboardType: TextInputType.name,
                     obscureText: false,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      //labelText: 'Nombre',
                       fillColor: Colors.grey[290],
                       filled: true,
                       hintText: 'Descripción del producto',
@@ -259,13 +259,12 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.number,
                     obscureText: false,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      //labelText: 'Nombre',
                       fillColor: Colors.grey[290],
                       filled: true,
                       hintText: 'Precio de venta',
@@ -280,13 +279,12 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.number,
                     obscureText: false,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      //labelText: 'Nombre',
                       fillColor: Colors.grey[290],
                       filled: true,
                       hintText: 'Costo de producción',
@@ -301,13 +299,12 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: TextField(
-                    autofocus: true,
+                    autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.number,
                     obscureText: false,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      //labelText: 'Nombre',
                       fillColor: Colors.grey[290],
                       filled: true,
                       hintText: 'Cantidad restante del producto',
@@ -423,13 +420,12 @@ class _AddProductState extends State<AddProduct> {
                     ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 15.0,bottom: 15.0),
+                  padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 5.0),
                   child: CupertinoButton(
                     disabledColor: const Color.fromRGBO(255, 152, 0, 1),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: (){
-                      //Localstore.instance.collection("products").doc().delete();
                       if(checkRegisterProduct() == -1){
                         showDialog<String>(
                           context: context,
@@ -493,9 +489,9 @@ class _AddProductState extends State<AddProduct> {
                                   );
                                   },
                                   child: const Text(
-                                    'Continuar',
-                                  style: TextStyle(fontSize: 16.0,color: Colors.blue),
-                                ),
+                                      'Continuar',
+                                    style: TextStyle(fontSize: 16.0,color: Colors.blue),
+                                  ),
                               ),
                             ],
                           );
