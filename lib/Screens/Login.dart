@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:first_proyect/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,12 +21,16 @@ class _LoginScreenState extends State<Login>{
 String _userEmail = "";
 String _userPassword = "";
 
+FirebaseFirestore db = FirebaseFirestore.instance;
+
 final List<User> saveUser = [];
 
 @override
   void initState() {
     super.initState();
+    //Firebase.initializeApp();
     readLS();
+    readLS2();
   }
 
   Future<void> readLS() async {
@@ -42,6 +48,14 @@ final List<User> saveUser = [];
         );
       });
     }
+  }
+
+  Future<void> readLS2() async {
+    await db.collection("Productos").get().then((event) {
+      for (var doc in event.docs) {
+      print("${doc.id} => ${doc.data()}");
+      }
+  });
   }
 
 @override
