@@ -10,7 +10,7 @@ class SalesHistory extends StatefulWidget{
 
 class _SalesHistory extends State<SalesHistory> {
 
-  Color primaryColor = const Color.fromRGBO(255, 152, 0, 1);
+  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
 
   @override
   Widget build(BuildContext context) {

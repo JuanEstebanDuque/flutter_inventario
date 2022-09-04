@@ -1,12 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import '../Colors App/Constants.dart';
 import 'Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:first_proyect/model/User.dart';
 import 'package:localstore/localstore.dart';
 import 'package:uuid/uuid.dart';
+import 'package:first_proyect/model/UserApp.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -14,23 +17,22 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<Register> {
-  var idFormatter = MaskTextInputFormatter(mask: '##########', filter: { "#": RegExp(r'[0-9]') });
-  var phoneFormatter = MaskTextInputFormatter(mask: '##########', filter: { "#": RegExp(r'[0-9]') });
+  var idFormatter = MaskTextInputFormatter(
+      mask: '##########', filter: {"#": RegExp(r'[0-9]')});
+  var phoneFormatter = MaskTextInputFormatter(
+      mask: '##########', filter: {"#": RegExp(r'[0-9]')});
 
+  final _firebaseAuth = FirebaseAuth.instance;
 
   //Necessary parameters for the DropdownButton of the user roles
-  List ListItem = [
-    'Administrador','Colaborador','Empleado'
-  ];
+  List ListItem = ['Administrador', 'Colaborador', 'Empleado'];
   var valueChoose;
 
-  List ListItem2 = [
-    'Hombre','Mujer'
-  ];
+  List ListItem2 = ['Hombre', 'Mujer'];
   var valueChoose2;
 
   //User arrangement to check if the user to be created already exists
-  final List<User> checkUser = [];
+  final List<UserApp> checkUser = [];
 
   //Parameters required to create a user
   String _userName = "";
@@ -54,7 +56,7 @@ class _RegisterScreenState extends State<Register> {
   Future<void> readLS() async {
     final items = await Localstore.instance.collection('users').get();
     for (var entry in items!.entries) {
-      var user = User.fromJson(entry.value);
+      var user = UserApp.fromJson(entry.value);
       checkUser.add(user);
     }
   }
@@ -63,36 +65,55 @@ class _RegisterScreenState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        automaticallyImplyLeading: false,
+        backgroundColor: primaryColor,
         title: const Text(
-          'Registrarte',
-          style: TextStyle(color: Colors.black),
+          'Registrarse',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 17,
+            fontFamily: 'ENGR',
+          ),
         ),
         elevation: 2,
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
-              left: 20.0, top: 20.0, right: 20.0, bottom: 0.0),
+              left: 20.0, top: 20.0, right: 20.0, bottom: 20.0),
           child: Column(
             children: <Widget>[
-              TextField(
-                autofocus: false,
-                textCapitalization: TextCapitalization.sentences,
-                autocorrect: true,
-                keyboardType: TextInputType.name,
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  fillColor: Colors.grey[290],
-                  filled: true,
-                  hintText: 'Nombre',
+              /*Image.asset(
+                'Assets/AnarchyStoresLogo1.png',
+                height: 100.0,
+              ),*/
+              const Padding(
+                padding: EdgeInsets.only(top: 5.0),
+                child: Text(
+                  'Para ingresar a la aplicación debe registrar todo los datos solicitados.',
+                  style: TextStyle(fontSize: 18.0, color: textColor),
                 ),
-                onChanged:  (String nameRegister) {
-                  setState(() {
-                    _userName = nameRegister;
-                  });
-                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: TextField(
+                  autofocus: false,
+                  textCapitalization: TextCapitalization.sentences,
+                  autocorrect: true,
+                  keyboardType: TextInputType.name,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    fillColor: Colors.grey[290],
+                    filled: true,
+                    hintText: 'Nombre',
+                  ),
+                  onChanged: (String nameRegister) {
+                    setState(() {
+                      _userName = nameRegister;
+                    });
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -160,7 +181,8 @@ class _RegisterScreenState extends State<Register> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
+                padding: const EdgeInsets.only(
+                    left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
                   autocorrect: true,
                   autofocus: false,
@@ -172,7 +194,7 @@ class _RegisterScreenState extends State<Register> {
                     filled: true,
                     hintText: 'Contraseña',
                   ),
-                  onChanged: (String userPassword){
+                  onChanged: (String userPassword) {
                     setState(() {
                       _userPassword = userPassword;
                     });
@@ -232,11 +254,10 @@ class _RegisterScreenState extends State<Register> {
                   keyboardType: TextInputType.text,
                   obscureText: false,
                   decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    fillColor: Colors.grey[290],
-                    filled: true,
-                    hintText: 'Nombre de la empresa'
-                  ),
+                      border: const OutlineInputBorder(),
+                      fillColor: Colors.grey[290],
+                      filled: true,
+                      hintText: 'Nombre de la empresa'),
                   onChanged: (String companyRegister) {
                     setState(() {
                       _userCompany = companyRegister;
@@ -245,84 +266,89 @@ class _RegisterScreenState extends State<Register> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
+                padding: const EdgeInsets.only(
+                    left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: Container(
-                  padding: const EdgeInsets.only(left: 10,right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey,width: 1),
+                    border: Border.all(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   height: 63,
                   alignment: Alignment.center,
                   child: DropdownButton(
-                  hint: const Text("Seleccione una opción"),
-                  value: valueChoose2,
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 30,
-                  elevation: 16,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                  ),
-                  isExpanded: true,
-                  onChanged: (newValue) {
-                    if(newValue == "Hombre"){
+                    hint: const Text("Seleccione una género"),
+                    value: valueChoose2,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 30,
+                    elevation: 16,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                    isExpanded: true,
+                    onChanged: (newValue) {
+                      if (newValue == "Hombre") {
                         _userSex = 1;
-                      }if(newValue == "Mujer"){
+                      }
+                      if (newValue == "Mujer") {
                         _userSex = 2;
                       }
-                    setState(() {
-                      valueChoose2 = newValue; 
-                    });
-                  },
-                  items: ListItem2.map((valueItem){
-                    return DropdownMenuItem(
-                      value: valueItem,
-                      child: Text(valueItem),
-                    );
-                  }).toList(),
+                      setState(() {
+                        valueChoose2 = newValue;
+                      });
+                    },
+                    items: ListItem2.map((valueItem) {
+                      return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 0.0), 
+                padding: const EdgeInsets.only(
+                    left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: Container(
-                  padding: const EdgeInsets.only(left: 10,right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey,width: 1),
+                    border: Border.all(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   height: 63,
                   alignment: Alignment.center,
                   child: DropdownButton(
-                  hint: const Text("Seleccione una opción"),
-                  value: valueChoose,
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 30,
-                  elevation: 16,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                  ),
-                  isExpanded: true,
-                  onChanged: (newValue) {
-                    if(newValue == "Administrador"){
+                    hint: const Text("Seleccione una rol"),
+                    value: valueChoose,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 30,
+                    elevation: 16,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                    isExpanded: true,
+                    onChanged: (newValue) {
+                      if (newValue == "Administrador") {
                         _optionRole = 1;
-                      }if(newValue == "Colaborador"){
+                      }
+                      if (newValue == "Colaborador") {
                         _optionRole = 2;
-                      }if(newValue == "Empleado"){
+                      }
+                      if (newValue == "Empleado") {
                         _optionRole = 3;
                       }
-                    setState(() {
-                      valueChoose = newValue; 
-                    });
-                  },
-                  items: ListItem.map((valueItem){
-                    return DropdownMenuItem(
-                      value: valueItem,
-                      child: Text(valueItem),
-                    );
-                  }).toList(),
+                      setState(() {
+                        valueChoose = newValue;
+                      });
+                    },
+                    items: ListItem.map((valueItem) {
+                      return DropdownMenuItem(
+                        value: valueItem,
+                        child: Text(valueItem),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
@@ -330,106 +356,114 @@ class _RegisterScreenState extends State<Register> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 15.0, right: 0.0, bottom: 10.0),
                 child: CupertinoButton(
-                    disabledColor: const Color.fromRGBO(255, 152, 0, 1),
-                    color: const Color.fromRGBO(255, 152, 0, 1),
+                    disabledColor: primaryColor,
+                    color: primaryColor,
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.5,
                     child: const Text(
                       'Registrarse',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: textButtonColor,
+                      ),
                     ),
                     onPressed: () {
-                      if(checkRegister() == 1){
+                      if (checkRegister() == 1) {
                         showDialog<String>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Registro exitoso'),
-                              content: const Text(
-                                'Su usuario fue registrado correctamente.'),
-                              actions: <Widget>[
-                                TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const Login()),
-                                    );
-                                  },
-                                  child: const Text(
-                                    'Continuar',
-                                  style: TextStyle(fontSize: 16.0,color: Colors.blue),
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Registro exitoso'),
+                                content: const Text(
+                                    'Su usuario fue registrado correctamente.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Login()),
+                                          (Route<dynamic> route) => false);
+                                    },
+                                    child: const Text(
+                                      'Continuar',
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.blue),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          });
-                      } else if(checkRegister() == 2){
+                                ],
+                              );
+                            });
+                      } else if (checkRegister() == 2) {
                         showDialog<String>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Registro no exitoso'),
-                              content: const Text(
-                                'Las contraseñas ingresadas no coinciden, verifique e intente nuevamente.'),
-                              actions: <Widget>[
-                                TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'Volver',
-                                  style: TextStyle(fontSize: 16.0,color: Colors.red),
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Registro no exitoso'),
+                                content: const Text(
+                                    'Las contraseñas ingresadas no coinciden, verifique e intente nuevamente.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Volver',
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.red),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          });
+                                ],
+                              );
+                            });
                       } else if (checkRegister() == 0) {
                         showDialog<String>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Registro no exitoso'),
-                            content: const Text(
-                              'El correo ingresado ya existe. Intente nuevamente.'),
-                            actions: <Widget>[
-                              TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Volver',
-                              style: TextStyle(fontSize: 16.0,color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        );
-                      });  
-                      } else if(checkRegister() == -1){
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Registro no exitoso'),
+                                content: const Text(
+                                    'El correo ingresado ya existe. Intente nuevamente.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Volver',
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
+                      } else if (checkRegister() == -1) {
                         showDialog<String>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Registro no exitoso'),
-                              content: const Text(
-                                'Complete los parámetros para poder registrarse. Intente nuevamente.'),
-                              actions: <Widget>[
-                              TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Volver',
-                              style: TextStyle(fontSize: 16.0,color: Colors.red),
-                              ),
-                              ),
-                            ],
-                          );
-                        });
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Registro no exitoso'),
+                                content: const Text(
+                                    'Complete los parámetros para poder registrarse. Intente nuevamente.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Volver',
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
                       }
                     }),
               ),
@@ -440,26 +474,51 @@ class _RegisterScreenState extends State<Register> {
     );
   }
 
-  
-  int checkRegister(){
+  int checkRegister() {
     int verifyRegister = -1;
-    if (_userName!="" && _userLastName!="" && _userId!="" && _userEmail!="" && _userPassword!="" && _userPassword.length>=6 && _checkPassword!="" && _checkPassword.length>=6 && _userPhone!="" && _userCompany!="" && _userSex!=0 && _optionRole!=0) {
-      if(checkUser.isNotEmpty){
+    if (_userName != "" &&
+        _userLastName != "" &&
+        _userId != "" &&
+        _userEmail != "" &&
+        _userPassword != "" &&
+        _userPassword.length >= 6 &&
+        _checkPassword != "" &&
+        _checkPassword.length >= 6 &&
+        _userPhone != "" &&
+        _userCompany != "" &&
+        _userSex != 0 &&
+        _optionRole != 0) {
+      if (checkUser.isNotEmpty) {
         for (int i = 0; i < checkUser.length; i++) {
           if (_userEmail == checkUser[i].userEmail) {
             verifyRegister = 0;
-            return verifyRegister;                    
+            return verifyRegister;
           }
         }
       }
-      if(_userPassword == _checkPassword){
+      if (_userPassword == _checkPassword) {
+        print("Registro exitoso");
         String randomKey = Uuid().v4();
-        Map<String, User> users = {
-          randomKey: User(randomKey,_userName, _userLastName, _userId, _userEmail,_userPassword, _userPhone, _userSex, _optionRole, _userCompany),
+        Map<String, UserApp> users = {
+          randomKey: UserApp(
+              randomKey,
+              _userName,
+              _userLastName,
+              _userId,
+              _userEmail,
+              _userPassword,
+              _userPhone,
+              _userSex,
+              _optionRole,
+              _userCompany),
         };
         for (var entry in users.entries) {
-        Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());
-        //Localstore.instance.collection("users").doc().delete();
+          Localstore.instance
+              .collection("users")
+              .doc(randomKey)
+              .set(entry.value.toJson());
+          print("se guardo");
+          //Localstore.instance.collection("users").doc().delete();
         }
         verifyRegister = 1;
         return verifyRegister;
@@ -467,7 +526,7 @@ class _RegisterScreenState extends State<Register> {
         verifyRegister = 2;
         return verifyRegister;
       }
-    } 
+    }
     return verifyRegister;
   }
 }

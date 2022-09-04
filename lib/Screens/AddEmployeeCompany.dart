@@ -8,11 +8,14 @@ class AddEmployeeCompany extends StatefulWidget {
 }
 
 class _AddEmployeeCompany extends State<AddEmployeeCompany> {
+
+  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        backgroundColor: primaryColor,
         title: const Text(
           'Añadir empleado',
           style: TextStyle(

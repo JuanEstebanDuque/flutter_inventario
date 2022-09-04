@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../model/User.dart';
+import '../model/UserApp.dart';
 
 class ManageUsers extends StatefulWidget {
-  List<User> user = [];
+  List<UserApp> user = [];
   ManageUsers(this.user,{Key? key}) : super(key: key);
   @override
   State<ManageUsers> createState() => _ManageUsers();
@@ -12,7 +12,7 @@ class ManageUsers extends StatefulWidget {
 
 class _ManageUsers extends State<ManageUsers>{
 
-  Color primaryColor = const Color.fromRGBO(255, 152, 0, 1);
+  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
 
   @override
   Widget build(BuildContext context) {

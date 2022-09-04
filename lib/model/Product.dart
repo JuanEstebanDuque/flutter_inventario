@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'ProductCategory.dart';
 import 'Status.dart';
 import 'dart:io';
 
-class Product{
+class Product {
   //attributes
   String _productId = "";
   String _nameProduct = '';
@@ -15,11 +16,26 @@ class Product{
   double _salePriceProduct = 0;
   double _productionPriceProduct = 0;
   int _quantityProduct = 0;
+  int _minimunStock = 0;
+  bool _isDiscounted = false;
+  bool _isChecked = false;
 
   //relations
 
   //methods
-  Product(String productId,String name,String material,String description,int category,int status,String imagePath,double salePrice,double productionPrice,int quantityProduct){
+  Product(
+      String productId,
+      String name,
+      String material,
+      String description,
+      int category,
+      int status,
+      String imagePath,
+      double salePrice,
+      double productionPrice,
+      int quantityProduct,
+      int minimunStock,
+      bool isDiscounted) {
     _productId = productId;
     _nameProduct = name;
     _materialProduct = material;
@@ -30,89 +46,133 @@ class Product{
     _salePriceProduct = salePrice;
     _productionPriceProduct = productionPrice;
     _quantityProduct = quantityProduct;
+    _minimunStock = minimunStock;
+    _isDiscounted = isDiscounted;
   }
 
-  void set productId(String productId){
+  void set productId(String productId) {
     _productId = productId;
   }
 
-  String get productId{
+  String get productId {
     return _productId;
   }
 
-  void set nameProduct(String nameProduct){
+  void set nameProduct(String nameProduct) {
     _nameProduct = nameProduct;
   }
 
-  String get nameProduct{
+  String get nameProduct {
     return _nameProduct;
   }
 
-  void set materialProduct(String materialProduct){
+  void set materialProduct(String materialProduct) {
     _materialProduct = materialProduct;
   }
-  
-  String get materialProduct{
+
+  String get materialProduct {
     return _materialProduct;
   }
 
-  void set descriptionProduct(String descriptionProduct){
+  void set descriptionProduct(String descriptionProduct) {
     _descriptionProduct = descriptionProduct;
   }
 
-  String get descriptionProduct{
+  String get descriptionProduct {
     return _descriptionProduct;
   }
 
-  void set categoryProduct(int categoryProduct){
+  void set categoryProduct(int categoryProduct) {
     _categoryProduct = categoryProduct;
   }
 
-  int get categoryProduct{
+  int get categoryProduct {
     return _categoryProduct;
   }
 
-  void set statusProduct(int statusProduct){
+  void set statusProduct(int statusProduct) {
     _statusProduct = statusProduct;
   }
 
-  int get statusProduct{
+  int get statusProduct {
     return _statusProduct;
   }
 
-  void set imagePathProduct(String imagePathProduct){
+  void set imagePathProduct(String imagePathProduct) {
     _imagePathProduct = imagePathProduct;
   }
 
-  String get imagePathProduct{
+  String get imagePathProduct {
     return _imagePathProduct;
   }
 
-  void set salePriceProduct(double salePriceProduct){
+  void set salePriceProduct(double salePriceProduct) {
     _salePriceProduct = salePriceProduct;
   }
 
-  double get salePriceProduct{
+  double get salePriceProduct {
     return _salePriceProduct;
   }
 
-  void set productionPriceProduct(double productionPriceProduct){
+  void set productionPriceProduct(double productionPriceProduct) {
     _productionPriceProduct = productionPriceProduct;
   }
 
-  double get productionPriceProduct{
+  double get productionPriceProduct {
     return _productionPriceProduct;
   }
 
-  void set quantityProduct(int quantityProduct){
+  void set quantityProduct(int quantityProduct) {
     _quantityProduct = quantityProduct;
   }
 
-  int get quantityProduct{
+  int get quantityProduct {
     return _quantityProduct;
   }
 
-  Map<String, dynamic> toJson(){
+  int get minimunStock {
+    return _minimunStock;
+  }
+
+  void set minimunStock(int minimunStock) {
+    _minimunStock = minimunStock;
+  }
+
+  void set isDiscounted(bool isDiscounted) {
+    _isDiscounted = isDiscounted;
+  }
+
+  bool get isDiscounted {
+    return _isDiscounted;
+  }
+
+  void set isChecked(bool isChecked) {
+    _isChecked = isChecked;
+  }
+
+  bool get isChecked {
+    return _isChecked;
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      if (productId != null) 'productId': productId,
+      if (nameProduct != null) 'nameProduct': nameProduct,
+      if (materialProduct != null) 'materialProduct': materialProduct,
+      if (descriptionProduct != null) 'descriptionProduct': descriptionProduct,
+      if (categoryProduct != null) 'categoryProduct': categoryProduct,
+      if (statusProduct != null) 'statusProduct': statusProduct,
+      if (imagePathProduct != null) 'imagePathProduct': imagePathProduct,
+      if (salePriceProduct != null) 'salePriceProduct': salePriceProduct,
+      if (productionPriceProduct != null)
+        'productionPriceProduct': productionPriceProduct,
+      if (quantityProduct != null) 'quantityProduct': quantityProduct,
+      if (minimunStock != null) 'minimunStock': minimunStock,
+      if (isDiscounted != null) 'isDiscounted': isDiscounted,
+    };
+  }
+
+  Map<String, dynamic> toJson() {
     return {
       "productId": _productId,
       "nameProduct": _nameProduct,
@@ -124,21 +184,24 @@ class Product{
       "salePriceProduct": _salePriceProduct,
       "productionPriceProduct": _productionPriceProduct,
       "quantityProduct": _quantityProduct,
+      "minimunStock": _minimunStock,
+      "isDiscounted": _isDiscounted
     };
   }
 
-  static Product fromJson(Map<String, dynamic> map){
+  static Product fromJson(Map<String, dynamic> map) {
     return Product(
-      map['productId'],
-      map['nameProduct'], 
-      map['materialProduct'], 
-      map['descriptionProduct'], 
-      map['categoryProduct'], 
-      map['statusProduct'],
-      map['imagePathProduct'], 
-      map['salePriceProduct'], 
-      map['productionPriceProduct'], 
-      map['quantityProduct']);
+        map['productId'],
+        map['nameProduct'],
+        map['materialProduct'],
+        map['descriptionProduct'],
+        map['categoryProduct'],
+        map['statusProduct'],
+        map['imagePathProduct'],
+        map['salePriceProduct'],
+        map['productionPriceProduct'],
+        map['quantityProduct'],
+        map['minimunStock'],
+        map['isDiscounted']);
   }
-
 }

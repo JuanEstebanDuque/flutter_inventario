@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:first_proyect/model/Product.dart';
+//import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:first_proyect/Colors App/Constants.dart';
 
 class InfoProduct extends StatefulWidget {
   Product productSelected;
-  InfoProduct(this.productSelected, { Key? key }) : super(key: key);
-
+  InfoProduct(this.productSelected, {Key? key}) : super(key: key);
   @override
   State<InfoProduct> createState() => _InfoProduct();
 }
@@ -15,36 +16,47 @@ class _InfoProduct extends State<InfoProduct> {
   String status = "";
 
   @override
-  initState(){
+  initState() {
     super.initState();
     category = _showCategoryProduct(widget.productSelected.categoryProduct);
     status = _showStatusProduct(widget.productSelected.statusProduct);
   }
 
-  String _showCategoryProduct(int category){
+  //final List<charts.Series> productSeriesList = [];
+  //final bool animate = false;
+
+  String _showCategoryProduct(int category) {
     String catego = "";
     switch (category) {
-      case 1: catego = "Anillo";
+      case 1:
+        catego = "Anillo";
         break;
-      case 2: catego = "Pulsera";
+      case 2:
+        catego = "Pulsera";
         break;
-      case 3: catego = "Aretes";
+      case 3:
+        catego = "Aretes";
         break;
-      case 4: catego = "Dije";
+      case 4:
+        catego = "Dije";
         break;
-      case 5: catego = "Collar";
+      case 5:
+        catego = "Collar";
         break;
-      case 6: catego = "Sombrero";
+      case 6:
+        catego = "Sombrero";
     }
     return catego;
   }
 
-  String _showStatusProduct(int status){
+  String _showStatusProduct(int status) {
     String stat = "";
     switch (status) {
-      case 1: stat = "Activa";
+      case 1:
+        stat = "Activa";
         break;
-      case 2: stat = "Inactiva";
+      case 2:
+        stat = "Inactiva";
         break;
     }
     return stat;
@@ -54,7 +66,7 @@ class _InfoProduct extends State<InfoProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        backgroundColor: primaryColor,
         title: const Text(
           'Descripción del producto',
           style: TextStyle(
@@ -66,7 +78,8 @@ class _InfoProduct extends State<InfoProduct> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(left: 20.0,top: 20.0,right: 20.0,bottom: 10.0),
+            padding: const EdgeInsets.only(
+                left: 20.0, top: 20.0, right: 20.0, bottom: 20.0),
             child: Column(
               children: <Widget>[
                 Image.asset(
@@ -76,24 +89,24 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 20.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 25.0, bottom: 0.0),
                     child: Text(
                       'Nombre: ${widget.productSelected.nameProduct}',
                       style: const TextStyle(
-                        fontSize: 19.5,
-                        fontStyle: FontStyle.normal
-                      ),
+                          fontSize: 18, fontStyle: FontStyle.normal),
                     ),
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
                       'Material: ${widget.productSelected.materialProduct}',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -101,11 +114,12 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
                       'Descripción: ${widget.productSelected.descriptionProduct}',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -113,11 +127,12 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
                       'Categoría: $category',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -125,11 +140,12 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
                       'Estado: $status',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -137,11 +153,12 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
                       'Precio de venta: ${widget.productSelected.salePriceProduct}',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -149,11 +166,12 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
                       'Costo de producción: ${widget.productSelected.productionPriceProduct}',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -161,11 +179,25 @@ class _InfoProduct extends State<InfoProduct> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0,right: 0.0,top: 10.0,bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
                     child: Text(
-                      'Cantidad restante: ${widget.productSelected.quantityProduct}',
+                      'Unidades restantes en tienda: ${widget.productSelected.quantityProduct}',
                       style: const TextStyle(
-                        fontSize: 19.5,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 0.0, right: 0.0, top: 10.0, bottom: 0.0),
+                    child: Text(
+                      'Unidad mínima requerida del producto: ${widget.productSelected.minimunStock}',
+                      style: const TextStyle(
+                        fontSize: 18,
                       ),
                     ),
                   ),
@@ -180,6 +212,15 @@ class _InfoProduct extends State<InfoProduct> {
                     )
                   ),
                 ),*/
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+                  child: Text(
+                    'Estadística de ventas del priducto',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

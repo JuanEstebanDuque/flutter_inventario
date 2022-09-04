@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 
-import '../model/User.dart';
+import '../model/UserApp.dart';
 
 // ignore: must_be_immutable
 class ChangePassword extends StatefulWidget {
-  List<User> user = [];
+  List<UserApp> user = [];
   String userEmailSelected;
   ChangePassword(this.user,this.userEmailSelected,{Key? key}) : super(key: key);
   @override
@@ -15,7 +15,7 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePassword extends State<ChangePassword>{
-  List<User> users = [];
+  List<UserApp> users = [];
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _ChangePassword extends State<ChangePassword>{
   String _password = "";
   String _passwordConfirm = "";
 
-  Color primaryColor = const Color.fromRGBO(255, 152, 0, 1);
+  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
 
   @override
   Widget build(BuildContext context) {
@@ -289,8 +289,8 @@ class _ChangePassword extends State<ChangePassword>{
     for (int i = 0; i < users.length; i++) {
       if (users[i].userEmail == widget.userEmailSelected) {
         Localstore.instance.collection("users").doc(_userId).delete();
-        Map<String, User> users = {
-          _userCode: User(_userCode, _userName, _userLastName, _userId, _userEmail, _userPassword, _userPhone, _userSex, _userRole, _userCompany)
+        Map<String, UserApp> users = {
+          _userCode: UserApp(_userCode, _userName, _userLastName, _userId, _userEmail, _userPassword, _userPhone, _userSex, _userRole, _userCompany)
         };
         for (var entry in users.entries) {
           Localstore.instance.collection("users").doc(entry.key).set(entry.value.toJson());

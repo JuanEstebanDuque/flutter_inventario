@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 class StatisticsReport extends StatefulWidget {
-  const StatisticsReport({ Key? key }) : super(key: key);
-
+  const StatisticsReport({Key? key}) : super(key: key);
   @override
   State<StatisticsReport> createState() => _StatisticsReportState();
 }
 
 class _StatisticsReportState extends State<StatisticsReport> {
+  Color primaryColor = const Color.fromRGBO(240, 165, 0, 1);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        backgroundColor: primaryColor,
         title: const Text(
           'Informe y estadística',
           style: TextStyle(

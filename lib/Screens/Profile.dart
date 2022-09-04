@@ -1,24 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:first_proyect/model/User.dart';
+import 'package:first_proyect/model/UserApp.dart';
+import 'package:first_proyect/Colors App/Constants.dart';
 
-class Profile extends StatefulWidget{
-  List<User> user = [];
+class Profile extends StatefulWidget {
+  List<UserApp> user = [];
   String userEmailSelected;
-  Profile(this.user,this.userEmailSelected,{Key? key}):super(key: key);
+  Profile(this.user, this.userEmailSelected, {Key? key}) : super(key: key);
   @override
   State<Profile> createState() => _Profile();
 }
 
-class _Profile extends State<Profile>{
-
-  var idFormatter = MaskTextInputFormatter(mask: '##########', filter: { "#": RegExp(r'[0-9]') });
-  var phoneFormatter = MaskTextInputFormatter(mask: '##########', filter: { "#": RegExp(r'[0-9]') });
+class _Profile extends State<Profile> {
+  var idFormatter = MaskTextInputFormatter(
+      mask: '##########', filter: {"#": RegExp(r'[0-9]')});
+  var phoneFormatter = MaskTextInputFormatter(
+      mask: '##########', filter: {"#": RegExp(r'[0-9]')});
 
   int profileSelected = -1;
-  Color primaryColor = const Color.fromRGBO(255, 152, 0, 1);
-
-
+  Color primaryColor = const Color.fromRGBO(240, 165, 0, 1);
 
   String _userName = "";
   String _userLastName = "";
@@ -36,16 +37,15 @@ class _Profile extends State<Profile>{
     roleProfile();
   }
 
-  int profileParameters(){
+  int profileParameters() {
     int profile = -1;
-    for (int i=0; i<widget.user.length; i++){
-      if(widget.user[i].userEmail == widget.userEmailSelected){
+    for (int i = 0; i < widget.user.length; i++) {
+      if (widget.user[i].userEmail == widget.userEmailSelected) {
         profile = i;
       }
     }
     return profile;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,8 @@ class _Profile extends State<Profile>{
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 15.0,left: 16,right: 13,bottom: 10.0),
+          padding: const EdgeInsets.only(
+              top: 15.0, left: 16, right: 13, bottom: 20.0),
           child: Column(
             children: <Widget>[
               const Align(
@@ -240,8 +241,7 @@ class _Profile extends State<Profile>{
                       color: Colors.grey[900],
                     ),
                   ),
-                  onChanged: (String emailRegister) {
-                  },
+                  onChanged: (String emailRegister) {},
                 ),
               ),
               const Align(
@@ -316,8 +316,7 @@ class _Profile extends State<Profile>{
                       color: Colors.grey[900],
                     ),
                   ),
-                  onChanged: (String sexRegister) {
-                  },
+                  onChanged: (String sexRegister) {},
                 ),
               ),
               const Align(
@@ -351,8 +350,7 @@ class _Profile extends State<Profile>{
                       color: Colors.grey[900],
                     ),
                   ),
-                  onChanged: (String rolRegister) {
-                  },
+                  onChanged: (String rolRegister) {},
                 ),
               ),
               const Align(
@@ -386,10 +384,30 @@ class _Profile extends State<Profile>{
                       color: Colors.grey[900],
                     ),
                   ),
-                  onChanged: (String companyRegister) {
+                  onChanged: (String companyRegister) {},
+                ),
+              ), //0.8212
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: CupertinoButton(
+                  color: primaryColor,
+                  disabledColor: primaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  pressedOpacity: 0.85,
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
+                  child: const Text(
+                    'Guardar cambios',
+                    style: TextStyle(
+                      color: textButtonColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
+              //Guardar cambios en la nube o datos locales y luego leer en homeScreen
             ],
           ),
         ),
@@ -397,22 +415,21 @@ class _Profile extends State<Profile>{
     );
   }
 
-  void sexProfile(){
-    if(widget.user[profileSelected].userSex == 1){
+  void sexProfile() {
+    if (widget.user[profileSelected].userSex == 1) {
       _sexProfile = "Hombre";
-    }else if(widget.user[profileSelected].userSex == 2){
+    } else if (widget.user[profileSelected].userSex == 2) {
       _sexProfile = "Mujer";
     }
   }
 
-  void roleProfile(){
-    if(widget.user[profileSelected].userRole == 1){
+  void roleProfile() {
+    if (widget.user[profileSelected].userRole == 1) {
       _roleProfile = "Administrador";
-    }else if(widget.user[profileSelected].userRole == 2){
+    } else if (widget.user[profileSelected].userRole == 2) {
       _roleProfile = "Colaborador";
-    }else if(widget.user[profileSelected].userRole == 3){
+    } else if (widget.user[profileSelected].userRole == 3) {
       _roleProfile = "Empleado";
     }
   }
-
 }

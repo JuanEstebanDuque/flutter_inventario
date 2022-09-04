@@ -1,6 +1,6 @@
 import 'package:first_proyect/model/UserRole.dart';
 
-class User{
+class UserApp{
   //attributes
   String _userCode = "";
   String _userName = "";
@@ -16,7 +16,7 @@ class User{
   //relations
 
   //methods
-  User(String userCode,String userName,String userLastName,String userId,String userEmail,String userPassword,String userPhone,int userSex,int userRole,String userCompany){
+  UserApp(String userCode,String userName,String userLastName,String userId,String userEmail,String userPassword,String userPhone,int userSex,int userRole,String userCompany){
     _userCode = userCode;
     _userName = userName;
     _userLastName = userLastName;
@@ -124,8 +124,8 @@ class User{
     };
   }
 
-  static User fromJson(Map<String, dynamic> map){
-    return User(
+  static UserApp fromJson(Map<String, dynamic> map){
+    return UserApp(
       map['userCode'],
       map['userName'], 
       map['userLastName'], 
@@ -135,7 +135,8 @@ class User{
       map['userPhone'],
       map['userSex'],
       map['userRole'],
-      map['userCompany']);
+      map['userCompany']
+    );
   }
 
 }

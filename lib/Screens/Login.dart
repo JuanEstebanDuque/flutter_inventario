@@ -1,86 +1,85 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:first_proyect/model/User.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_proyect/model/UserApp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:localstore/localstore.dart';
+import '../Colors App/Constants.dart';
 import 'HomeScreen.dart';
 import 'Register.dart';
 import 'ForgotPassword.dart';
 
-class Login extends StatefulWidget{
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
   @override
   State<Login> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<Login>{
-String _userEmail = "";
-String _userPassword = "";
+class loginData {
+  static List<UserApp> saveUser = [];
+}
 
-FirebaseFirestore db = FirebaseFirestore.instance;
+class _LoginScreenState extends State<Login> {
+  String _userEmail = "";
+  String _userPassword = "";
 
-final List<User> saveUser = [];
+  final _firebaseAuth = FirebaseAuth.instance;
 
-@override
+  @override
   void initState() {
     super.initState();
-    //Firebase.initializeApp();
     readLS();
-    readLS2();
   }
+
+  //UserApp? _userFromFirebase (User? user) => user == null ? null : UserApp(user.userCode, user.userName, user.userLastName, userApp.userId, userApp.userEmail, userApp.userPassword, userApp.userPhone, userApp.userSex, userApp.userRole, userApp.userCompany);
 
   Future<void> readLS() async {
     final items = await Localstore.instance.collection("users").get();
-    if(items!.entries.isNotEmpty){
-      for(var entry in items.entries){
-        var user = User.fromJson(entry.value);
-        saveUser.add(user);
-      }
-    }else if(saveUser.isEmpty){
-      setState(() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Register()),
-        );
-      });
+    print("entro a for de entries");
+    for (var entry in items!.entries) {
+      var user = UserApp.fromJson(entry.value);
+      loginData.saveUser.add(user);
+      print(loginData.saveUser[0].userEmail);
     }
   }
 
-  Future<void> readLS2() async {
+  //Stream<UserApp> get onAuthStateChanged => _firebaseAuth.authStateChanges().asyncMap(_userFromFirebase);
+
+  /*Future<void> readLS2() async {
     await db.collection("Productos").get().then((event) {
       for (var doc in event.docs) {
       print("${doc.id} => ${doc.data()}");
       }
   });
-  }
+  }*/
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(left: 20.0,top: 135.0,right: 20.0,bottom: 0.0),
+            padding: const EdgeInsets.only(
+                left: 20.0, top: 135.0, right: 20.0, bottom: 0.0),
             child: Column(
               children: <Widget>[
                 Image.asset(
                   'Assets/AnarchyStoresLogo1.png',
-                  width: 350,
-                  height: 140,
+                  width: 340,
+                  height: 120,
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(top: 43.0),
+                  padding: EdgeInsets.only(top: 40.0),
                   child: Text(
                     'Iniciar Sesión',
                     style: TextStyle(fontSize: 32),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5.0,top: 12.0,right: 5.0,bottom: 0.0),
+                  padding: const EdgeInsets.only(
+                      left: 5.0, top: 12.0, right: 5.0, bottom: 0.0),
                   child: TextField(
                     autofocus: false,
                     autocorrect: true,
@@ -93,7 +92,7 @@ final List<User> saveUser = [];
                       filled: true,
                       hintText: 'Correo electrónico',
                     ),
-                    onChanged: (String emailLogin){
+                    onChanged: (String emailLogin) {
                       setState(() {
                         _userEmail = emailLogin;
                       });
@@ -101,7 +100,8 @@ final List<User> saveUser = [];
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5.0,top: 10.0,right: 5.0,bottom: 0.0),
+                  padding: const EdgeInsets.only(
+                      left: 5.0, top: 10.0, right: 5.0, bottom: 0.0),
                   child: TextField(
                     autofocus: false,
                     autocorrect: true,
@@ -114,7 +114,7 @@ final List<User> saveUser = [];
                       filled: true,
                       hintText: 'Contraseña',
                     ),
-                    onChanged: (String passwordLogin){
+                    onChanged: (String passwordLogin) {
                       setState(() {
                         _userPassword = passwordLogin;
                       });
@@ -122,91 +122,107 @@ final List<User> saveUser = [];
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 0.0,bottom: 0.0),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                       padding: const EdgeInsets.only(left: 14.0,top: 0.0,right: 2.0,bottom: 0.0),
-                       child: TextButton(
-                         style: TextButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 14.0),
-                    ),
-                    onPressed: (){
-                      Navigator.push(
-                        context, 
-                        MaterialPageRoute(builder: (context) => Register()),
-                        );
-                    },
-                    child: const Text(
-                        'Registrarse',
-                        style: TextStyle(color: Colors.blueGrey),
+                  padding: const EdgeInsets.only(
+                      left: 0.0, right: 2.0, top: 0.0, bottom: 0.0),
+                  child: Center(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Row(
+                        children: <Widget>[
+                          /*Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10.0, top: 0.0, right: 2.0, bottom: 0.0),
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(fontSize: 15.5),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Register()),
+                                );
+                              },
+                              child: const Text(
+                                'Registrarse',
+                                style: TextStyle(color: Colors.blueGrey),
+                              ),
+                            ),
+                          ),*/
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 67.0, top: 0.0, right: 0.0, bottom: 0.0),
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(fontSize: 15.5),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ForgotPassword(loginData.saveUser)),
+                                );
+                              },
+                              child: const Text(
+                                '¿Olvidó su contraseña?',
+                                style: TextStyle(color: Colors.blueGrey),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0,top: 0.0,right: 0.0,bottom: 0.0),
-                      child: TextButton(
-                       style: TextButton.styleFrom(
-                         textStyle: const TextStyle(fontSize: 13.5),
                     ),
-                    onPressed: (){
-                      Navigator.push(
-                        context, 
-                        MaterialPageRoute(builder: (context) => ForgotPassword(saveUser)),
-                        );
-                    },
-                    child: const Text(
-                        '¿Olvidó su contraseña?',
-                        style: TextStyle(color: Colors.blueGrey),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ), 
-                ), 
+                  ),
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 0.0,top: 0.0,right: 0.0,bottom: 15.0),
+                  padding: const EdgeInsets.only(
+                      left: 0.0, top: 0.0, right: 0.0, bottom: 15.0),
                   child: CupertinoButton(
-                    disabledColor: const Color.fromRGBO(255, 152, 0, 1),
+                    disabledColor: primaryColor,
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: () {
-                      if(verifyLogin() == 0){
+                      if (verifyLogin() == 0) {
                         Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen(saveUser, _userEmail)),
-                        (Route<dynamic> route) => false);
-                      } else if (verifyLogin() == -1){
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(loginData.saveUser, _userEmail)),
+                            (Route<dynamic> route) => false);
+                      } else if (verifyLogin() == -1) {
                         showDialog<String>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Inicio de sesión incorrecto'),
-                            content: const Text(
-                              'El correo o contraseña ingresados son incorrectos. Intente nuevamente.'),
-                            actions: <Widget>[
-                              TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Volver',
-                              style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        );
-                      });
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title:
+                                    const Text('Inicio de sesión incorrecto'),
+                                content: const Text(
+                                    'El correo o contraseña ingresados son incorrectos. Intente nuevamente.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Volver',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
                       }
                     },
                     child: const Text(
                       'Iniciar sesión',
                       style: TextStyle(
-                        color: Colors.white,
-                      ),
+                          color: textButtonColor,
+                          //fontWeight: FontWeight.bold,
+                          fontSize: 20),
                     ),
-                    color: const Color.fromRGBO(255, 152, 0, 1),
+                    color: primaryColor,
                   ),
                 ),
               ],
@@ -217,15 +233,18 @@ final List<User> saveUser = [];
     );
   }
 
-  int verifyLogin(){
+  int verifyLogin() {
     int checkLogin = -1;
-    for(int i=0;i<saveUser.length;i++){
-      if(_userEmail == saveUser[i].userEmail && _userPassword == saveUser[i].userPassword){
+    print(loginData.saveUser.length);
+    for (int i = 0; i < loginData.saveUser.length; i++) {
+      print("entro for");
+      if (_userEmail == loginData.saveUser[i].userEmail &&
+          _userPassword == loginData.saveUser[i].userPassword) {
         checkLogin = 0;
-        return checkLogin;              
-      } 
+        return checkLogin;
+      }
     }
+    print(checkLogin);
     return checkLogin;
   }
-
 }

@@ -1,44 +1,16 @@
 {
   "project_info": {
     "project_number": "834142657843",
+    "firebase_url": "https://inventario-ec200-default-rtdb.firebaseio.com",
     "project_id": "inventario-ec200",
     "storage_bucket": "inventario-ec200.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:834142657843:android:c4ff61c2b5f0748fbcf246",
+        "mobilesdk_app_id": "1:834142657843:android:254ddcb1f39a3d44bcf246",
         "android_client_info": {
           "package_name": "com.example.first_proyect"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "834142657843-j2p0q725rbl43mdr4s0gekp70va57rb3.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBsBK0fe3dC9xn46Y2wOdY20a3EKNnLVJM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "834142657843-j2p0q725rbl43mdr4s0gekp70va57rb3.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:834142657843:android:aa99d76a66011f17bcf246",
-        "android_client_info": {
-          "package_name": "com.example.prueba_firebase"
         }
       },
       "oauth_client": [

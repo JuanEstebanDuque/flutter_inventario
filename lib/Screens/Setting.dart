@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 
 import 'ChangePassword.dart';
-import 'package:first_proyect/model/User.dart';
+import 'package:first_proyect/model/UserApp.dart';
 
 class Setting extends StatefulWidget{
-  List<User> user = [];
+  List<UserApp> user = [];
   String userEmailSelected;
   Setting(this.user,this.userEmailSelected, {Key? key}):super(key: key);
   @override
@@ -16,11 +16,14 @@ class Setting extends StatefulWidget{
 }
 
 class _Setting extends State<Setting>{
+
+  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 152, 0, 1),
+        backgroundColor: primaryColor,
         title: const Text(
           'Ajustes',
           style: TextStyle(
