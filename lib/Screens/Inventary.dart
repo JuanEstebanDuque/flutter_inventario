@@ -1,4 +1,5 @@
 import 'package:first_proyect/Colors%20App/Constants.dart';
+import 'package:first_proyect/main.dart';
 import 'package:first_proyect/model/ProductCategory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,8 +78,16 @@ class _Inventary extends State<Inventary> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => InfoProduct(productSelected)),
+                    builder: (context) => InfoProduct(
+                      productSelected,
+                    ),
+                  ),
                 );
+                /*navigatorKey.currentState!.push(
+                  MaterialPageRoute(
+                    builder: (context) => InfoProduct(productSelected),
+                  ),
+                );*/
               },
               child: Card(
                 elevation: 5,
@@ -120,6 +129,8 @@ class _Inventary extends State<Inventary> {
                                                   .quantityProduct -
                                               1;
                                           Navigator.of(context).pop();
+                                          /*navigatorKey.currentState!
+                                              .pop(context);*/
                                         },
                                       ),
                                       CupertinoButton(
@@ -132,7 +143,7 @@ class _Inventary extends State<Inventary> {
                                           ),
                                         ),
                                         onPressed: () {
-                                          TextField(
+                                          TextFormField(
                                             autofocus: false,
                                             autocorrect: true,
                                             keyboardType: TextInputType.number,
@@ -155,6 +166,17 @@ class _Inventary extends State<Inventary> {
                                                     double.parse(newPrice);
                                               });
                                             },
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            validator: (newPrice) => newPrice !=
+                                                        null &&
+                                                    newPrice !=
+                                                        productsData
+                                                            .products[index]
+                                                            .salePriceProduct
+                                                            .toString()
+                                                ? 'El precio del producto no puede ser igual al precio anterior'
+                                                : null,
                                           );
                                           productsData.products[index]
                                                   .quantityProduct -
@@ -166,7 +188,12 @@ class _Inventary extends State<Inventary> {
                                 },
                               );
                             } else if (result == Menu.Editar) {
-                              /*Navigator.push(
+                              /*navigatorKey.currentState!.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPassword(),
+                                  ),
+                                );
+                              Navigator.push(
                                 context, 
                                 MaterialPageRoute(builder: (context) => AddProduct(productSelected)),
                               );*/

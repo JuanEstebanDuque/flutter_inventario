@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_proyect/main.dart';
 import 'package:first_proyect/model/productsData.dart';
 import 'package:first_proyect/model/storeData.dart';
 
@@ -166,9 +167,17 @@ class _Home extends State<Home> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            InfoProduct(productSelected)),
+                                      builder: (context) => InfoProduct(
+                                        productSelected,
+                                      ),
+                                    ),
                                   );
+                                  /*navigatorKey.currentState!.push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          InfoProduct(productSelected),
+                                    ),
+                                  );*/
                                 },
                                 child: Card(
                                   elevation: 5,
@@ -277,16 +286,30 @@ class _Home extends State<Home> {
                                   child: PopupMenuButton<Menu>(
                                     onSelected: (Menu result) {
                                       if (result == Menu.Vender) {
+                                        navigatorKey.currentState!.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPassword(),
+                                  ),
                                         /*Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => AddProduct()),
                                 );*/
                                       } else if (result == Menu.Editar) {
+                                        navigatorKey.currentState!.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPassword(),
+                                  ),
+                                );
                                         /*Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => AddProduct(productSelected)),
                                 );*/
-                                      } else if (result == Menu.Estadisticas) {
+                                      } else if (result == Menu.Estadisticas) 
+                                      navigatorKey.currentState!.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPassword(),
+                                  ),
+                                );{
                                         /*Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => AddProduct(productSelected)),

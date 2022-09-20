@@ -1,13 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_proyect/model/UserData.dart';
+import 'package:first_proyect/model/UserData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:first_proyect/model/UserApp.dart';
 import 'package:first_proyect/Colors App/Constants.dart';
 
+import '../main.dart';
+
 class Profile extends StatefulWidget {
-  List<UserApp> user = [];
-  String userEmailSelected;
-  Profile(this.user, this.userEmailSelected, {Key? key}) : super(key: key);
+  Profile({Key? key}) : super(key: key);
   @override
   State<Profile> createState() => _Profile();
 }
@@ -23,9 +26,7 @@ class _Profile extends State<Profile> {
 
   String _userName = "";
   String _userLastName = "";
-  String _userId = "";
   String _userPhone = "";
-  String _userCompany = "";
   String _sexProfile = "";
   String _roleProfile = "";
 
@@ -37,10 +38,12 @@ class _Profile extends State<Profile> {
     roleProfile();
   }
 
+  final user = FirebaseAuth.instance.currentUser!;
+
   int profileParameters() {
     int profile = -1;
-    for (int i = 0; i < widget.user.length; i++) {
-      if (widget.user[i].userEmail == widget.userEmailSelected) {
+    for (int i = 0; i < UserData.users.length; i++) {
+      if (UserData.users[i].userEmail == user.email) {
         profile = i;
       }
     }
@@ -102,7 +105,7 @@ class _Profile extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   autofocus: false,
                   textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
@@ -115,7 +118,7 @@ class _Profile extends State<Profile> {
                     border: const OutlineInputBorder(),
                     fillColor: Colors.grey[290],
                     filled: true,
-                    hintText: widget.user[profileSelected].userName,
+                    hintText: UserData.users[profileSelected].userName,
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],
@@ -126,6 +129,11 @@ class _Profile extends State<Profile> {
                       _userName = nameRegister;
                     });
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userName) => _userName !=
+                          null //TODO: Verificar cuando se lean los usuarios de firebase que el nuevo nombre no sea el mismo
+                      ? 'El nombre no puede estar vacío'
+                      : null,
                 ),
               ),
               const Align(
@@ -143,7 +151,7 @@ class _Profile extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   autofocus: false,
                   textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
@@ -156,7 +164,7 @@ class _Profile extends State<Profile> {
                     border: const OutlineInputBorder(),
                     fillColor: Colors.grey[290],
                     filled: true,
-                    hintText: widget.user[profileSelected].userLastName,
+                    hintText: UserData.users[profileSelected].userLastName,
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],
@@ -167,6 +175,11 @@ class _Profile extends State<Profile> {
                       _userLastName = lastNameRegister;
                     });
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userLastName) => _userLastName !=
+                          null //TODO: Verificar cuando se lean los usuarios de firebase que el nuevo apellido no sea el mismo
+                      ? 'El apellido no puede estar vacío'
+                      : null,
                 ),
               ),
               const Align(
@@ -185,29 +198,17 @@ class _Profile extends State<Profile> {
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
                 child: TextField(
-                  inputFormatters: [idFormatter],
-                  autofocus: false,
-                  autocorrect: true,
-                  keyboardType: TextInputType.number,
-                  obscureText: false,
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
+                  enabled: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     fillColor: Colors.grey[290],
                     filled: true,
-                    hintText: widget.user[profileSelected].userId,
-                    hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[700],
+                    hintText: UserData.users[profileSelected].userId,
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.red,
                     ),
                   ),
-                  onChanged: (String idRegister) {
-                    setState(() {
-                      _userId = idRegister;
-                    });
-                  },
                 ),
               ),
               const Align(
@@ -231,7 +232,7 @@ class _Profile extends State<Profile> {
                     border: const OutlineInputBorder(),
                     fillColor: Colors.grey[290],
                     filled: true,
-                    hintText: widget.user[profileSelected].userEmail,
+                    hintText: UserData.users[profileSelected].userEmail,
                     prefixIcon: const Icon(
                       Icons.lock,
                       color: Colors.red,
@@ -259,7 +260,7 @@ class _Profile extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   inputFormatters: [phoneFormatter],
                   autofocus: false,
                   autocorrect: true,
@@ -272,7 +273,7 @@ class _Profile extends State<Profile> {
                     border: const OutlineInputBorder(),
                     fillColor: Colors.grey[290],
                     filled: true,
-                    hintText: widget.user[profileSelected].userPhone,
+                    hintText: UserData.users[profileSelected].userPhone,
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[700],
@@ -283,6 +284,12 @@ class _Profile extends State<Profile> {
                       _userPhone = phoneRegister;
                     });
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userPhone) => _userPhone != null &&
+                          _userPhone.length !=
+                              10 //TODO: Verificar cuando se lean los usuarios de firebase que el nuevo teléfono no sea el mismo
+                      ? 'El teléfono no puede estar vacío'
+                      : null,
                 ),
               ),
               const Align(
@@ -364,28 +371,6 @@ class _Profile extends State<Profile> {
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
-                  enabled: false,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    fillColor: Colors.grey[290],
-                    filled: true,
-                    hintText: widget.user[profileSelected].userCompany,
-                    prefixIcon: const Icon(
-                      Icons.lock,
-                      color: Colors.red,
-                    ),
-                    hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[900],
-                    ),
-                  ),
-                  onChanged: (String companyRegister) {},
-                ),
               ), //0.8212
               Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -395,7 +380,8 @@ class _Profile extends State<Profile> {
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   pressedOpacity: 0.85,
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
+                    //navigatorKey.currentState!.pop(context);
                   },
                   child: const Text(
                     'Guardar cambios',
@@ -416,19 +402,19 @@ class _Profile extends State<Profile> {
   }
 
   void sexProfile() {
-    if (widget.user[profileSelected].userSex == 1) {
+    if (UserData.users[profileSelected].userSex == 1) {
       _sexProfile = "Hombre";
-    } else if (widget.user[profileSelected].userSex == 2) {
+    } else if (UserData.users[profileSelected].userSex == 2) {
       _sexProfile = "Mujer";
     }
   }
 
   void roleProfile() {
-    if (widget.user[profileSelected].userRole == 1) {
+    if (UserData.users[profileSelected].userRole == 1) {
       _roleProfile = "Administrador";
-    } else if (widget.user[profileSelected].userRole == 2) {
+    } else if (UserData.users[profileSelected].userRole == 2) {
       _roleProfile = "Colaborador";
-    } else if (widget.user[profileSelected].userRole == 3) {
+    } else if (UserData.users[profileSelected].userRole == 3) {
       _roleProfile = "Empleado";
     }
   }

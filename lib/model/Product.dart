@@ -172,6 +172,21 @@ class Product {
     };
   }
 
+  Product.fromJson2(Map<String, dynamic> json) {
+    _productId = json['productId'] as String;
+    _nameProduct = json['nameProduct'] as String;
+    _materialProduct = json['materialProduct'] as String;
+    _descriptionProduct = json['descriptionProduct'] as String;
+    _categoryProduct = json['categoryProduct'] as int;
+    _statusProduct = json['statusProduct'] as int;
+    _imagePathProduct = json['imagePathProduct'] as String;
+    _salePriceProduct = json['salePriceProduct'] as double;
+    _productionPriceProduct = json['productionPriceProduct'] as double;
+    _quantityProduct = json['quantityProduct'] as int;
+    _minimunStock = json['minimunStock'] as int;
+    _isDiscounted = json['isDiscounted'] as bool;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "productId": _productId,

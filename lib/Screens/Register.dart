@@ -1,3 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:first_proyect/main.dart';
+import 'package:first_proyect/model/UserData.dart';
 import 'package:flutter/gestures.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -23,6 +28,7 @@ class _RegisterScreenState extends State<Register> {
       mask: '##########', filter: {"#": RegExp(r'[0-9]')});
 
   final _firebaseAuth = FirebaseAuth.instance;
+  final formKey = GlobalKey<FormState>();
 
   //Necessary parameters for the DropdownButton of the user roles
   List ListItem = ['Administrador', 'Colaborador', 'Empleado'];
@@ -30,9 +36,6 @@ class _RegisterScreenState extends State<Register> {
 
   List ListItem2 = ['Hombre', 'Mujer'];
   var valueChoose2;
-
-  //User arrangement to check if the user to be created already exists
-  final List<UserApp> checkUser = [];
 
   //Parameters required to create a user
   String _userName = "";
@@ -42,7 +45,6 @@ class _RegisterScreenState extends State<Register> {
   String _userPassword = "";
   String _checkPassword = "";
   String _userPhone = "";
-  String _userCompany = "";
   int _userSex = 0;
   int _optionRole = 0;
 
@@ -57,7 +59,7 @@ class _RegisterScreenState extends State<Register> {
     final items = await Localstore.instance.collection('users').get();
     for (var entry in items!.entries) {
       var user = UserApp.fromJson(entry.value);
-      checkUser.add(user);
+      UserData.users.add(user);
     }
   }
 
@@ -82,6 +84,7 @@ class _RegisterScreenState extends State<Register> {
           padding: const EdgeInsets.only(
               left: 20.0, top: 20.0, right: 20.0, bottom: 20.0),
           child: Column(
+            key: formKey,
             children: <Widget>[
               /*Image.asset(
                 'Assets/AnarchyStoresLogo1.png',
@@ -96,7 +99,7 @@ class _RegisterScreenState extends State<Register> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
-                child: TextField(
+                child: TextFormField(
                   autofocus: false,
                   textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
@@ -113,12 +116,16 @@ class _RegisterScreenState extends State<Register> {
                       _userName = nameRegister;
                     });
                   },
+                  autofillHints: const [AutofillHints.name],
+                  /*autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userName) =>
+                      _userName != null ? 'Ingrese un nombre válido' : null,*/
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   autofocus: false,
                   textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
@@ -135,12 +142,17 @@ class _RegisterScreenState extends State<Register> {
                       _userLastName = lastNameRegister;
                     });
                   },
+                  autofillHints: const [AutofillHints.familyName],
+                  /*autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userLastName) => _userLastName != null
+                      ? 'Ingrese un apellido válido'
+                      : null,*/
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   inputFormatters: [idFormatter],
                   autofocus: false,
                   autocorrect: true,
@@ -151,18 +163,27 @@ class _RegisterScreenState extends State<Register> {
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Identificación',
+                    prefixIcon: const Icon(
+                      Icons.person,
+                      color: secundaryColor,
+                    ),
                   ),
                   onChanged: (String idRegister) {
                     setState(() {
                       _userId = idRegister;
                     });
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userId) =>
+                      _userId != null && _userId.length != 10
+                          ? 'Ingrese una identificación válida'
+                          : null,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   autofocus: false,
                   autocorrect: true,
                   keyboardType: TextInputType.emailAddress,
@@ -172,18 +193,25 @@ class _RegisterScreenState extends State<Register> {
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Correo',
+                    prefixIcon: const Icon(Icons.email, color: secundaryColor),
                   ),
                   onChanged: (String emailRegister) {
                     setState(() {
                       _userEmail = emailRegister;
                     });
                   },
+                  autofillHints: const [AutofillHints.email],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userEmail) =>
+                      _userEmail != null && !EmailValidator.validate(_userEmail)
+                          ? 'Ingrese un correo válido'
+                          : null,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   autocorrect: true,
                   autofocus: false,
                   keyboardType: TextInputType.text,
@@ -193,18 +221,27 @@ class _RegisterScreenState extends State<Register> {
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Contraseña',
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: secundaryColor,
+                    ),
                   ),
                   onChanged: (String userPassword) {
                     setState(() {
                       _userPassword = userPassword;
                     });
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userPassword) =>
+                      _userPassword != null && _userPassword.length < 6
+                          ? 'Ingrese una contraseña válida'
+                          : null,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   autofocus: false,
                   autocorrect: true,
                   keyboardType: TextInputType.text,
@@ -214,18 +251,28 @@ class _RegisterScreenState extends State<Register> {
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Confimar contraseña',
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: secundaryColor,
+                    ),
                   ),
                   onChanged: (String checkPasswordRegister) {
                     setState(() {
                       _checkPassword = checkPasswordRegister;
                     });
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_checkPassword) => _checkPassword != null &&
+                          _checkPassword.length < 6 &&
+                          _checkPassword != _userPassword
+                      ? 'La contraseña no coincide'
+                      : null,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
+                child: TextFormField(
                   inputFormatters: [phoneFormatter],
                   autofocus: false,
                   autocorrect: true,
@@ -236,33 +283,22 @@ class _RegisterScreenState extends State<Register> {
                     fillColor: Colors.grey[290],
                     filled: true,
                     hintText: 'Número de teléfono',
+                    prefixIcon: const Icon(
+                      Icons.phone,
+                      color: secundaryColor,
+                    ),
                   ),
                   onChanged: (String numberRegister) {
                     setState(() {
                       _userPhone = numberRegister;
                     });
                   },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
-                child: TextField(
-                  autofocus: false,
-                  textCapitalization: TextCapitalization.sentences,
-                  autocorrect: true,
-                  keyboardType: TextInputType.text,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      fillColor: Colors.grey[290],
-                      filled: true,
-                      hintText: 'Nombre de la empresa'),
-                  onChanged: (String companyRegister) {
-                    setState(() {
-                      _userCompany = companyRegister;
-                    });
-                  },
+                  autofillHints: const [AutofillHints.telephoneNumber],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (_userPhone) =>
+                      _userPhone != null && _userPhone.length != 10
+                          ? 'Ingrese un número de teléfono válido'
+                          : null,
                 ),
               ),
               Padding(
@@ -379,12 +415,18 @@ class _RegisterScreenState extends State<Register> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
+                                      signUp();
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Login()),
+                                              builder: (context) => Login()),
                                           (Route<dynamic> route) => false);
+                                      /*navigatorKey.currentState!
+                                          .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Login()),
+                                              (Route<dynamic> route) => false);*/
                                     },
                                     child: const Text(
                                       'Continuar',
@@ -408,6 +450,7 @@ class _RegisterScreenState extends State<Register> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                     child: const Text(
                                       'Volver',
@@ -431,6 +474,7 @@ class _RegisterScreenState extends State<Register> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                     child: const Text(
                                       'Volver',
@@ -453,7 +497,8 @@ class _RegisterScreenState extends State<Register> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.of(context).pop();
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                     child: const Text(
                                       'Volver',
@@ -485,12 +530,11 @@ class _RegisterScreenState extends State<Register> {
         _checkPassword != "" &&
         _checkPassword.length >= 6 &&
         _userPhone != "" &&
-        _userCompany != "" &&
         _userSex != 0 &&
         _optionRole != 0) {
-      if (checkUser.isNotEmpty) {
-        for (int i = 0; i < checkUser.length; i++) {
-          if (_userEmail == checkUser[i].userEmail) {
+      if (UserData.users.isNotEmpty) {
+        for (int i = 0; i < UserData.users.length; i++) {
+          if (_userEmail == UserData.users[i].userEmail) {
             verifyRegister = 0;
             return verifyRegister;
           }
@@ -500,17 +544,8 @@ class _RegisterScreenState extends State<Register> {
         print("Registro exitoso");
         String randomKey = Uuid().v4();
         Map<String, UserApp> users = {
-          randomKey: UserApp(
-              randomKey,
-              _userName,
-              _userLastName,
-              _userId,
-              _userEmail,
-              _userPassword,
-              _userPhone,
-              _userSex,
-              _optionRole,
-              _userCompany),
+          randomKey: UserApp(randomKey, _userName, _userLastName, _userId,
+              _userEmail, _userPassword, _userPhone, _userSex, _optionRole),
         };
         for (var entry in users.entries) {
           Localstore.instance
@@ -518,6 +553,23 @@ class _RegisterScreenState extends State<Register> {
               .doc(randomKey)
               .set(entry.value.toJson());
           print("se guardo");
+
+          FirebaseFirestore db = FirebaseFirestore.instance;
+
+          final Reference ref = FirebaseStorage.instance.ref().child('Users');
+
+          UserApp user = UserApp(randomKey, _userName, _userLastName, _userId,
+              _userEmail, _userPassword, _userPhone, _optionRole, _userSex);
+
+          UserData.users.add(user);
+
+          final usr = <String, dynamic>{randomKey: user.toJson()};
+
+          db.runTransaction((Transaction transaction) async {
+            CollectionReference reference = db.collection('Users');
+            await reference.add(usr);
+          });
+
           //Localstore.instance.collection("users").doc().delete();
         }
         verifyRegister = 1;
@@ -528,5 +580,20 @@ class _RegisterScreenState extends State<Register> {
       }
     }
     return verifyRegister;
+  }
+
+  Future<void> signUp() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator()));
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _userEmail.toString().trim(),
+          password: _userPassword.toString().trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
   }
 }

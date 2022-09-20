@@ -5,6 +5,7 @@ import 'dart:io' as io;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_proyect/Screens/createStore.dart';
+import 'package:first_proyect/main.dart';
 
 import 'package:first_proyect/model/productsData.dart';
 import 'package:first_proyect/model/storeData.dart';
@@ -24,9 +25,7 @@ import 'createStore.dart';
 
 class AddProduct extends StatefulWidget {
   //Receive the arrangement of products already read in 'HomeScreen'.
-  List<UserApp> users = [];
-  String userSelected;
-  AddProduct(this.users, this.userSelected, {Key? key}) : super(key: key);
+  AddProduct({Key? key}) : super(key: key);
   @override
   State<AddProduct> createState() => _AddProduct();
 }
@@ -59,7 +58,8 @@ class _AddProduct extends State<AddProduct> {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.of(context).pop();
+                      //navigatorKey.currentState!.pop(context);
                     },
                     child: const Text(
                       'Volver',
@@ -72,6 +72,7 @@ class _AddProduct extends State<AddProduct> {
       }
     });
     Navigator.of(context).pop();
+    //navigatorKey.currentState!.pop(context);
   }
 
   //checklist to verify if the product to be added exists
@@ -124,7 +125,7 @@ class _AddProduct extends State<AddProduct> {
           child: Center(
             child: Column(
               children: <Widget>[
-                TextField(
+                TextFormField(
                   autofocus: false,
                   textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
@@ -144,6 +145,7 @@ class _AddProduct extends State<AddProduct> {
                       _nameProduct = nameProduct;
                     });
                   },
+                  //TODO: Añadir validator a todos los campos
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
@@ -446,7 +448,8 @@ class _AddProduct extends State<AddProduct> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        Navigator.pop(context);
+                                        Navigator.of(context).pop();
+                                        //navigatorKey.currentState!.pop(context);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(20),
@@ -514,7 +517,8 @@ class _AddProduct extends State<AddProduct> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.of(context).pop();
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                     child: const Text(
                                       'Volver',
@@ -538,7 +542,8 @@ class _AddProduct extends State<AddProduct> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.of(context).pop();
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                     child: const Text(
                                       'Volver',
@@ -563,13 +568,18 @@ class _AddProduct extends State<AddProduct> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomeScreen(
-                                                widget.users,
-                                                widget.userSelected)),
-                                      );
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomeScreen()),
+                                          (Route<dynamic> route) => false);
+                                      /*navigatorKey.currentState!
+                                          .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomeScreen()),
+                                              (Route<dynamic> route) => false);*/
                                     },
                                     child: const Text(
                                       'Continuar',
@@ -667,10 +677,10 @@ class _AddProduct extends State<AddProduct> {
 
       db.runTransaction((Transaction transaction) async {
         CollectionReference reference = db.collection('tiendas');
-        reference.doc(id)
+        /*reference.doc(id)
           ..update({
             'storeProducts': FieldValue.arrayUnion([prdct])
-          });
+          });*/
         reference.doc(id).collection('storeProducts').add(prdct);
       });
     }

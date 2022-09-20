@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_proyect/main.dart';
+
 import 'Login.dart';
 import 'package:first_proyect/Screens/ManageUsers.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,18 +9,16 @@ import 'package:localstore/localstore.dart';
 
 import 'ChangePassword.dart';
 import 'package:first_proyect/model/UserApp.dart';
+import 'package:first_proyect/Colors App/Constants.dart';
 
-class Setting extends StatefulWidget{
-  List<UserApp> user = [];
-  String userEmailSelected;
-  Setting(this.user,this.userEmailSelected, {Key? key}):super(key: key);
+class Setting extends StatefulWidget {
+  Setting({Key? key}) : super(key: key);
   @override
   State<Setting> createState() => _Setting();
 }
 
-class _Setting extends State<Setting>{
-
-  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
+class _Setting extends State<Setting> {
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +35,28 @@ class _Setting extends State<Setting>{
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 5.0,left: 5,right: 5,bottom: 10.0),
+          padding:
+              const EdgeInsets.only(top: 5.0, left: 5, right: 5, bottom: 10.0),
           child: Column(
-            children: <Widget> [
+            children: <Widget>[
               ListTile(
                 title: const Text('Cambiar contraseña'),
-                leading: const Icon(Icons.lock,
+                leading: const Icon(
+                  Icons.lock,
                   color: Colors.black,
                 ),
-                onTap: (){
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChangePassword(widget.user,widget.userEmailSelected)),
+                    MaterialPageRoute(
+                      builder: (context) => ChangePassword(),
+                    ),
                   );
+                  /*navigatorKey.currentState!.push(
+                    MaterialPageRoute(
+                      builder: (context) => ChangePassword(),
+                    ),
+                  );*/
                 },
               ),
               const Divider(
@@ -58,14 +68,22 @@ class _Setting extends State<Setting>{
               ),
               ListTile(
                 title: const Text('Administrar usuarios'),
-                leading: const Icon(Icons.people,
+                leading: const Icon(
+                  Icons.people,
                   color: Colors.black,
                 ),
-                onTap: (){
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ManageUsers(widget.user)),
+                    MaterialPageRoute(
+                      builder: (context) => ManageUsers(),
+                    ),
                   );
+                  /*navigatorKey.currentState!.push(
+                    MaterialPageRoute(
+                      builder: (context) => ManageUsers(),
+                    ),
+                  );*/
                 },
               ),
               const Divider(
@@ -75,7 +93,6 @@ class _Setting extends State<Setting>{
                 indent: 10,
                 endIndent: 10,
               ),
-
               Align(
                 alignment: Alignment.bottomLeft,
                 child: ListTile(
@@ -85,16 +102,18 @@ class _Setting extends State<Setting>{
                       color: Colors.red,
                     ),
                   ),
-                  leading: const Icon(Icons.exit_to_app,
+                  leading: const Icon(
+                    Icons.exit_to_app,
                     color: Colors.red,
                   ),
-                  onTap: (){
+                  onTap: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text('Cerrar sesión'),
-                          content: const Text('¿Está seguro que desea cerrar sesión?'),
+                          content: const Text(
+                              '¿Está seguro que desea cerrar sesión?'),
                           actions: <Widget>[
                             CupertinoDialogAction(
                               child: const Text(
@@ -104,11 +123,19 @@ class _Setting extends State<Setting>{
                                 ),
                               ),
                               onPressed: () {
-                                exitUserToApp();
-                                Navigator.push(
+                                FirebaseAuth.instance.signOut();
+                                Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const Login()),
+                                  MaterialPageRoute(
+                                    builder: (context) => Login(),
+                                  ),
+                                  (Route<dynamic> route) => false,
                                 );
+                                /*navigatorKey.currentState!.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const Login(),
+                                  ),
+                                );*/
                               },
                             ),
                             CupertinoDialogAction(
@@ -119,7 +146,8 @@ class _Setting extends State<Setting>{
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.of(context).pop();
+                                //navigatorKey.currentState!.pop(context);
                               },
                             ),
                           ],
@@ -135,13 +163,4 @@ class _Setting extends State<Setting>{
       ),
     );
   }
-
-  void exitUserToApp() {
-    for (int i=0; i < widget.user.length; i++) {
-      if (widget.user[i].userEmail == widget.userEmailSelected) {
-        Localstore.instance.collection("users").doc(widget.user[i].userId).delete();
-      }
-    }
-  }
-
 }

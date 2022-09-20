@@ -1,3 +1,5 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:first_proyect/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Login.dart';
@@ -6,8 +8,7 @@ import 'package:first_proyect/model/UserApp.dart';
 import 'package:first_proyect/Colors App/Constants.dart';
 
 class ForgotPassword extends StatefulWidget {
-  List<UserApp> user = [];
-  ForgotPassword(this.user, {Key? key}) : super(key: key);
+  ForgotPassword({Key? key}) : super(key: key);
   @override
   State<ForgotPassword> createState() => _ForgotPassword();
 }
@@ -63,7 +64,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 0.0, top: 15.0, right: 0.0, bottom: 15.0),
-                  child: TextField(
+                  child: TextFormField(
                     autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
@@ -85,6 +86,11 @@ class _ForgotPassword extends State<ForgotPassword> {
                         _inputUserEmail = emailRecoverPassword;
                       });
                     },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (_inputUserEmail) => _inputUserEmail != null &&
+                            EmailValidator.validate(_inputUserEmail)
+                        ? "Ingrese un correo electrónico válido"
+                        : null,
                   ),
                 ),
                 CupertinoButton(
@@ -110,6 +116,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
+                                //navigatorKey.currentState!.pop(context);
                               },
                               child: const Text(
                                 'Cancelar',
@@ -118,11 +125,15 @@ class _ForgotPassword extends State<ForgotPassword> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()),
-                                );
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Login()),
+                                    (Route<dynamic> route) => false);
+                                /*navigatorKey.currentState!.pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => const Login()),
+                                    (Route<dynamic> route) => false);*/
                               },
                               child: const Text('Continuar'),
                             ),

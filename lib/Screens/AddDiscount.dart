@@ -1,7 +1,9 @@
 import 'package:first_proyect/Screens/CalendarOffers.dart';
 import 'package:first_proyect/Screens/Home.dart';
 import 'package:first_proyect/Screens/HomeScreen.dart';
+import 'package:first_proyect/main.dart';
 import 'package:first_proyect/model/DiscountProducts.dart';
+import 'package:first_proyect/model/DiscountsData.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,6 @@ import 'package:first_proyect/Colors App/Constants.dart';
 import 'package:first_proyect/model/productsData.dart';
 
 class AddDiscount extends StatefulWidget {
-  //Receive the arrangement of products already read in 'HomeScreen'.
   AddDiscount({Key? key}) : super(key: key);
   @override
   State<AddDiscount> createState() => _AddDiscount();
@@ -72,7 +73,7 @@ class _AddDiscount extends State<AddDiscount> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: TextField(
+                  child: TextFormField(
                     autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
@@ -93,6 +94,11 @@ class _AddDiscount extends State<AddDiscount> {
                         _discountName = value;
                       });
                     },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (_discountName) =>
+                        _discountName != null && equalName() == false
+                            ? 'El nombre del descuento ya existe.'
+                            : null,
                   ),
                 ),
                 Padding(
@@ -291,6 +297,15 @@ class _AddDiscount extends State<AddDiscount> {
     );
   }
 
+  bool equalName() {
+    for (int i = 0; i < DiscountsData.discounts.length; i++) {
+      if (DiscountsData.discounts[i]._discountName == _discountName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void showAlertDiscount() {
     if (_discountName.isEmpty) {
       showDialog(
@@ -322,6 +337,7 @@ class _AddDiscount extends State<AddDiscount> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  //navigatorKey.currentState!.pop(context);
                 },
               ),
             ],
@@ -358,6 +374,7 @@ class _AddDiscount extends State<AddDiscount> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  //navigatorKey.currentState!.pop(context);
                 },
               ),
             ],
@@ -394,10 +411,13 @@ class _AddDiscount extends State<AddDiscount> {
                 ),
                 onPressed: () {
                   saveDiscount();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      (Route<dynamic> route) => false);
+                  /*navigatorKey.currentState!.pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false);*/
                 },
               ),
               CupertinoDialogAction(
@@ -410,6 +430,7 @@ class _AddDiscount extends State<AddDiscount> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  //navigatorKey.currentState!.pop(context);
                 },
               ),
             ],
@@ -427,5 +448,7 @@ class _AddDiscount extends State<AddDiscount> {
         .collection("discounts")
         .doc(randomKey)
         .set(discountProduct.toJson());
+
+    DiscountsData.discounts.add(discountProduct);
   }
 }

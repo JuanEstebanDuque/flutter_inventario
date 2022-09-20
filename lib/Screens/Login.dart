@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_proyect/main.dart';
 import 'package:first_proyect/model/UserApp.dart';
+import 'package:first_proyect/model/UserData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -17,11 +20,9 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginScreenState();
 }
 
-class loginData {
-  static List<UserApp> saveUser = [];
-}
-
 class _LoginScreenState extends State<Login> {
+  final formKey = GlobalKey<FormState>();
+
   String _userEmail = "";
   String _userPassword = "";
 
@@ -40,8 +41,8 @@ class _LoginScreenState extends State<Login> {
     print("entro a for de entries");
     for (var entry in items!.entries) {
       var user = UserApp.fromJson(entry.value);
-      loginData.saveUser.add(user);
-      print(loginData.saveUser[0].userEmail);
+      UserData.users.add(user);
+      print(UserData.users[0].userEmail);
     }
   }
 
@@ -64,6 +65,7 @@ class _LoginScreenState extends State<Login> {
             padding: const EdgeInsets.only(
                 left: 20.0, top: 135.0, right: 20.0, bottom: 0.0),
             child: Column(
+              key: formKey,
               children: <Widget>[
                 Image.asset(
                   'Assets/AnarchyStoresLogo1.png',
@@ -80,7 +82,7 @@ class _LoginScreenState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 5.0, top: 12.0, right: 5.0, bottom: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.emailAddress,
@@ -97,12 +99,18 @@ class _LoginScreenState extends State<Login> {
                         _userEmail = emailLogin;
                       });
                     },
+                    autofillHints: const [AutofillHints.email],
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (_userEmail) => _userEmail != null &&
+                            !EmailValidator.validate(_userEmail)
+                        ? 'Ingrese un correo válido'
+                        : null,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 5.0, top: 10.0, right: 5.0, bottom: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     autofocus: false,
                     autocorrect: true,
                     keyboardType: TextInputType.text,
@@ -119,6 +127,11 @@ class _LoginScreenState extends State<Login> {
                         _userPassword = passwordLogin;
                       });
                     },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (_userPassword) =>
+                        _userPassword != null && _userPassword.length < 6
+                            ? 'Ingrese una contraseña válida'
+                            : null,
                   ),
                 ),
                 Padding(
@@ -129,9 +142,9 @@ class _LoginScreenState extends State<Login> {
                       alignment: Alignment.topCenter,
                       child: Row(
                         children: <Widget>[
-                          /*Padding(
+                          Padding(
                             padding: const EdgeInsets.only(
-                                left: 10.0, top: 0.0, right: 2.0, bottom: 0.0),
+                                left: 10.0, top: 0.0, right: 0.0, bottom: 0.0),
                             child: TextButton(
                               style: TextButton.styleFrom(
                                 textStyle: const TextStyle(fontSize: 15.5),
@@ -142,27 +155,34 @@ class _LoginScreenState extends State<Login> {
                                   MaterialPageRoute(
                                       builder: (context) => Register()),
                                 );
+                                /*navigatorKey.currentState!.push(
+                                    (MaterialPageRoute(
+                                        builder: (context) => Register())));*/
                               },
                               child: const Text(
                                 'Registrarse',
                                 style: TextStyle(color: Colors.blueGrey),
                               ),
                             ),
-                          ),*/
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 67.0, top: 0.0, right: 0.0, bottom: 0.0),
+                                left: 7.0, top: 0.0, right: 0.0, bottom: 0.0),
                             child: TextButton(
                               style: TextButton.styleFrom(
                                 textStyle: const TextStyle(fontSize: 15.5),
                               ),
                               onPressed: () {
                                 Navigator.push(
-                                  context,
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgotPassword()));
+                                /*navigatorKey.currentState!.push(
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          ForgotPassword(loginData.saveUser)),
-                                );
+                                    builder: (context) => ForgotPassword(),
+                                  ),
+                                );*/
                               },
                               child: const Text(
                                 '¿Olvidó su contraseña?',
@@ -183,14 +203,17 @@ class _LoginScreenState extends State<Login> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: () {
-                      if (verifyLogin() == 0) {
+                      if (verifyLogin() == 0 /*&& signIn() == 0*/) {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(loginData.saveUser, _userEmail)),
+                                builder: (context) => HomeScreen()),
                             (Route<dynamic> route) => false);
-                      } else if (verifyLogin() == -1) {
+                        /*navigatorKey.currentState!.pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                            (Route<dynamic> route) => false);*/
+                      } else if (verifyLogin() == -1 /*&& signIn() == -1*/) {
                         showDialog<String>(
                             context: context,
                             barrierDismissible: false,
@@ -235,16 +258,32 @@ class _LoginScreenState extends State<Login> {
 
   int verifyLogin() {
     int checkLogin = -1;
-    print(loginData.saveUser.length);
-    for (int i = 0; i < loginData.saveUser.length; i++) {
+    print(UserData.users.length);
+    for (int i = 0; i < UserData.users.length; i++) {
       print("entro for");
-      if (_userEmail == loginData.saveUser[i].userEmail &&
-          _userPassword == loginData.saveUser[i].userPassword) {
+      if (_userEmail == UserData.users[i].userEmail &&
+          _userPassword == UserData.users[i].userPassword) {
         checkLogin = 0;
         return checkLogin;
       }
     }
     print(checkLogin);
     return checkLogin;
+  }
+
+  Future<int> signIn() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator()));
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _userEmail.trim(), password: _userPassword.trim());
+      return 0;
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      return -1;
+    }
   }
 }

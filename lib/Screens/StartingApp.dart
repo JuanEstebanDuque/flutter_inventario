@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_proyect/Screens/Login.dart';
 import 'package:first_proyect/Screens/Register.dart';
 import 'package:first_proyect/Screens/createStore.dart';
@@ -21,24 +22,12 @@ class _StartingAppState extends State<StartingApp> {
 
   @override
   void initState() {
-    readLS();
-    if (saveUser.isNotEmpty) {
-      setState(() {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Login()), (route) => false);
-      });
-    }
     super.initState();
-    readLS();
-    if (saveUser.isNotEmpty) {
-      setState(() {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Login()), (route) => false);
-      });
-    }
+    //readLS();
+    readFirebase();
   }
 
-  Future<void> readLS() async {
+  /*Future<void> readLS() async {
     final items = await Localstore.instance.collection("users").get();
     if (items!.entries.isNotEmpty) {
       for (var entry in items.entries) {
@@ -50,6 +39,21 @@ class _StartingAppState extends State<StartingApp> {
       setState(() {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => Login()), (route) => false);
+      });
+    }
+  }*/
+
+  Future<void> readFirebase() async {
+    if (FirebaseAuth.instance.authStateChanges() != null) {
+      setState(() {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Login()), (route) => false);
+      });
+    } else {
+      setState(() {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Register()),
+            (route) => false);
       });
     }
   }

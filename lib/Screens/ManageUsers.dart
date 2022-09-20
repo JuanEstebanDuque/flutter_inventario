@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import '../model/UserApp.dart';
 
 class ManageUsers extends StatefulWidget {
-  List<UserApp> user = [];
-  ManageUsers(this.user,{Key? key}) : super(key: key);
+  ManageUsers({Key? key}) : super(key: key);
   @override
   State<ManageUsers> createState() => _ManageUsers();
 }
 
-class _ManageUsers extends State<ManageUsers>{
-
-  Color primaryColor = const Color.fromRGBO(240, 165, 0,1);
+class _ManageUsers extends State<ManageUsers> {
+  Color primaryColor = const Color.fromRGBO(240, 165, 0, 1);
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +29,7 @@ class _ManageUsers extends State<ManageUsers>{
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              
-            ],
+            children: <Widget>[],
           ),
         ),
       ),

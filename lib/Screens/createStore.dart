@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_proyect/Screens/HomeScreen.dart';
 import 'package:first_proyect/Screens/Login.dart';
 import 'package:first_proyect/Screens/Register.dart';
+import 'package:first_proyect/main.dart';
 import 'package:first_proyect/model/Product.dart';
 import 'package:first_proyect/model/Store.dart';
 import 'package:first_proyect/model/UserApp.dart';
@@ -15,9 +16,7 @@ import 'package:localstore/localstore.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateStore extends StatefulWidget {
-  List<UserApp> user = [];
-  String userEmailSelected;
-  CreateStore(this.user, this.userEmailSelected, {Key? key}) : super(key: key);
+  CreateStore({Key? key}) : super(key: key);
   @override
   State<CreateStore> createState() => _CreateStore();
 }
@@ -179,6 +178,7 @@ class _CreateStore extends State<CreateStore> {
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop();
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                   ),
                                 ],
@@ -206,6 +206,7 @@ class _CreateStore extends State<CreateStore> {
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop();
+                                      //navigatorKey.currentState!.pop(context);
                                     },
                                   ),
                                 ],
@@ -233,11 +234,18 @@ class _CreateStore extends State<CreateStore> {
                                     ),
                                     onPressed: () {
                                       saveStore();
-                                      Navigator.of(context).push(
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
                                           MaterialPageRoute(
-                                              builder: (context) => HomeScreen(
-                                                  widget.user,
-                                                  widget.userEmailSelected)));
+                                              builder: (context) =>
+                                                  HomeScreen()),
+                                          (route) => false);
+                                      /*navigatorKey.currentState!
+                                          .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomeScreen()),
+                                              (Route<dynamic> route) => false);*/
                                     },
                                   ),
                                 ],
