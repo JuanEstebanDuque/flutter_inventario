@@ -8,10 +8,10 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  bool isLogin = true;
+  bool isLogin = false;
 
   @override
-  Widget build(BuildContext context) => isLogin ? Login() : StartingApp();
+  Widget build(BuildContext context) => !isLogin ? Login() : StartingApp();
 
   void toggleView() {
     setState(() {

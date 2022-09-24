@@ -150,14 +150,14 @@ class _LoginScreenState extends State<Login> {
                                 textStyle: const TextStyle(fontSize: 15.5),
                               ),
                               onPressed: () {
-                                Navigator.push(
+                                /*Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Register()),
-                                );
-                                /*navigatorKey.currentState!.push(
+                                );*/
+                                navigatorKey.currentState!.push(
                                     (MaterialPageRoute(
-                                        builder: (context) => Register())));*/
+                                        builder: (context) => Register())));
                               },
                               child: const Text(
                                 'Registrarse',
@@ -173,16 +173,16 @@ class _LoginScreenState extends State<Login> {
                                 textStyle: const TextStyle(fontSize: 15.5),
                               ),
                               onPressed: () {
-                                Navigator.push(
+                                /*navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ForgotPassword()));
-                                /*navigatorKey.currentState!.push(
+                                            ForgotPassword()));*/
+                                navigatorKey.currentState!.push(
                                   MaterialPageRoute(
                                     builder: (context) => ForgotPassword(),
                                   ),
-                                );*/
+                                );
                               },
                               child: const Text(
                                 '¿Olvidó su contraseña?',
@@ -203,17 +203,17 @@ class _LoginScreenState extends State<Login> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     pressedOpacity: 0.85,
                     onPressed: () {
-                      if (verifyLogin() == 0 /*&& signIn() == 0*/) {
-                        Navigator.pushAndRemoveUntil(
+                      if (verifyLogin() == 0 && signIn() == 0) {
+                        /*Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => HomeScreen()),
-                            (Route<dynamic> route) => false);
-                        /*navigatorKey.currentState!.pushAndRemoveUntil(
+                            (Route<dynamic> route) => false);*/
+                        navigatorKey.currentState!.pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => HomeScreen()),
-                            (Route<dynamic> route) => false);*/
-                      } else if (verifyLogin() == -1 /*&& signIn() == -1*/) {
+                            (Route<dynamic> route) => false);
+                      } else if (verifyLogin() == -1 && signIn() == -1) {
                         showDialog<String>(
                             context: context,
                             barrierDismissible: false,
@@ -226,7 +226,8 @@ class _LoginScreenState extends State<Login> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      navigatorKey.currentState!.pop();
+                                      //Navigator.pop(context);
                                     },
                                     child: const Text(
                                       'Volver',
@@ -279,7 +280,7 @@ class _LoginScreenState extends State<Login> {
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _userEmail.trim(), password: _userPassword.trim());
+          email: _userEmail, password: _userPassword);
       return 0;
     } on FirebaseAuthException catch (e) {
       print(e);

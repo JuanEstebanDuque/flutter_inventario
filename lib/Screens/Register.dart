@@ -416,17 +416,17 @@ class _RegisterScreenState extends State<Register> {
                                   TextButton(
                                     onPressed: () {
                                       signUp();
-                                      Navigator.pushAndRemoveUntil(
+                                      /*Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => Login()),
-                                          (Route<dynamic> route) => false);
-                                      /*navigatorKey.currentState!
+                                          (Route<dynamic> route) => false);*/
+                                      navigatorKey.currentState!
                                           .pushAndRemoveUntil(
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       const Login()),
-                                              (Route<dynamic> route) => false);*/
+                                              (Route<dynamic> route) => false);
                                     },
                                     child: const Text(
                                       'Continuar',
@@ -590,8 +590,8 @@ class _RegisterScreenState extends State<Register> {
 
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _userEmail.toString().trim(),
-          password: _userPassword.toString().trim());
+          email: _userEmail.trim(), password: _userPassword.trim());
+      return;
     } on FirebaseAuthException catch (e) {
       print(e);
     }

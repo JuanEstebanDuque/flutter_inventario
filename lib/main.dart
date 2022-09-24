@@ -14,17 +14,17 @@ import 'package:intl/date_symbol_data_local.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 8080);
 
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
-//final navigatorKey = GlobalKey<NavigatorState>();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
-  Widget build(BuildContext context) {
+  /*Widget build(BuildContext context) {
     return FutureBuilder(
         future: _fbApp,
         builder: (context, snapshot) {
@@ -47,36 +47,36 @@ class MyApp extends StatelessWidget {
             home: StartingApp(),
           );
         });
-  }
+  }*/
 
-  /*@override
+  @override
   Widget build(BuildContext context) => MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: "AnarchyStores",
         home: MainPage(),
-      );*/
+      );
 }
 
-/*class MainPage extends StatelessWidget {
+class MainPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
-        body: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(
-                  child: Text(
-                      'No se pudo conectar a la red. Error ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              return HomeScreen();
-            } else {
-              return AuthScreen();
-            }
-          },
-        ),
-        return StreamBuilder<User?>(
+          body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text(
+                    'No se pudo conectar a la red. Error ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            return HomeScreen();
+          } else {
+            return AuthScreen();
+          }
+        },
+      )
+          /*return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -116,6 +116,6 @@ class MyApp extends StatelessWidget {
             title: 'Inventaty',
             home: StartingApp(),
           );
-        })
-      );
-}*/
+        })*/
+          );
+}
